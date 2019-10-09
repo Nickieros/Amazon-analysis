@@ -616,6 +616,7 @@ function validateParsingResult(result) {
     if (errorMessage) {
         analyse.error = true;
         analyse.errorMsg = `Ошибка импорта данных из файла: ${errorMessage}`;
+        // eslint-disable-next-line no-alert
         alert(analyse.errorMsg);
         return false;
     } return true;
@@ -654,7 +655,7 @@ function tableClick(event) {
         analyse.searchTerm = event.target.closest('tr').firstChild.firstChild.innerHTML;
         analyse.searchTermIndex = analyse.parsedResult.data.findIndex(row => row.indexOf(analyse.searchTerm) !== -1);
 
-        let html = ''; // html buffer
+        let html; // html buffer
         const filteredResult = new Set(); // to avoid duplicates
         const filteredAsins = [];
 
@@ -747,6 +748,7 @@ function tableClick(event) {
         html = `<h3>2. Фильтр частотности для ASINs '${analyse.selectedAsins.join("', '")}', поисковая фраза: "${analyse.searchTerm}"  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>`;
         document.getElementById('frequencyHeader').innerHTML = html;
 
+        // eslint-disable-next-line max-len
         html = '<h3>3. Количественные значения click, conversion  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>';
         document.getElementById('quantitativeValuesHeader').innerHTML = html;
 
@@ -778,6 +780,7 @@ function tableClick(event) {
         const isFullTable = (event.target.closest('div').id !== 'competitors');
 
         // sets ascending sort or inverts direction if exists
+        // eslint-disable-next-line max-len
         if (sortedDirection !== '') analyse.isSortAscending = (sortedDirection !== 'ascending'); else analyse.isSortAscending = true;
 
         event.target.closest('tr').querySelectorAll('data-sorted-direction')
@@ -1035,6 +1038,7 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
                 value = 100;
             }
             input.value = value.toFixed(3);
+            // eslint-disable-next-line no-unused-expressions
             input.type === 'range'
                 ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
                 : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
@@ -1059,6 +1063,7 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
             value = 100;
         }
         input.value = value.toFixed(3);
+        // eslint-disable-next-line no-unused-expressions
         input.type === 'range'
             ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
             : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
@@ -1116,6 +1121,7 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
 
 function createQuantitativeTitle(rowIndex, columnType) {
     if (isNaN(rowIndex) || rowIndex < 0) throw Error('rowIndex must be a number >= 0');
+    // eslint-disable-next-line max-len
     if (columnType !== 'Click' && columnType !== 'Conversion') throw Error('createQuantitativeTitle: columnType must be string "Click" or "Conversion"');
 
     const isClick = (columnType === 'Click');
@@ -1127,6 +1133,7 @@ function createQuantitativeTitle(rowIndex, columnType) {
         analyse[isClick ? 'capacityClick' : 'capacityConversion']} - разрядностью минимального числа`;
 }
 
+// eslint-disable-next-line no-new,no-undef
 new ClipboardJS('.clipboard'); // handle clicks on elements with ".clipboard" class for copy data to clipboard
 document.body.querySelector('#fileInput').value = ''; // clear filename if exists
 document.body.addEventListener('click', tableClick);
