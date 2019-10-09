@@ -4,7 +4,7 @@ Analysis tool for Amazon sales. Amazon competitors analysis and SEO analysis
 ![Hi-res screenshot](readme_media/screenshot.jpg "Hi-res screenshot")
 
 Video:
-![Video](readme_media/video.mp4 "step-by-step")
+![Video step-by-step](readme_media/video.mp4 "Video step-by-step")
 
 ## Overview
 Analysis tool for Amazon sales. Amazon competitors analysis and SEO analysis. 
