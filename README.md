@@ -1,4 +1,4 @@
-# Presentations shell
+# Amazon-analysis
 Analysis tool for Amazon sales. Amazon competitors analysis and SEO analysis 
 
 ![Hi-res screenshot](readme_media/screenshot.jpg "Hi-res screenshot")
