@@ -1,0 +1,1112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Amazon competitors analysis and SEO</title>
+    <style>
+		body {
+			padding: 0;
+			margin: 0;
+			font-size: 0.88vw;
+		}
+
+		table{
+			font-family: monospace;
+			border-collapse: separate;
+			border-spacing: 2px;
+			border: none;
+		}
+
+		table.fullTable {
+			cursor: pointer;
+			width: 98.5vw;
+		}
+
+		td {
+			border-collapse: collapse;
+			border-spacing: 0;
+			border: none;
+			padding: 0.15vw 0.05vw 0.2vw 0.2vw;
+			text-align: center;
+		}
+
+		#competitors {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.competitorsTable th {
+			cursor: pointer;
+			background-color: #fff0f0;
+		}
+
+		#competitors td {
+			background-color: aliceblue;
+		}
+
+		#competitors td:nth-child(2) {
+			text-align: center;
+		}
+
+		#competitors td:nth-child(2n) {
+			background: none;
+		}
+
+		td span {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			display: block;
+		}
+
+		tr[data-visible="true"] {
+			display: table-row;
+		}
+
+		.fullTable th {
+			background-color: #fff0f0;
+		}
+
+		tr[data-visible="false"] {
+			display: none;
+		}
+
+		.quantitativeSetup td:nth-child(1n) {
+			text-align: right;
+		}
+
+		.quantitativeSetup td:nth-child(2n) {
+			text-align: left;
+		}
+
+		.quantitativeSetup td:nth-child(1),
+		.quantitativeSetup td:nth-child(2),
+		.quantitativeSetup td:nth-child(3),
+		.quantitativeSetup td:nth-child(4) {
+			background-color: #f0fff8;
+		}
+
+		.quantitativeSetup td:nth-child(5),
+		.quantitativeSetup td:nth-child(6),
+		.quantitativeSetup td:nth-child(7),
+		.quantitativeSetup td:nth-child(8) {
+			background-color: aliceblue;
+		}
+
+		table.quantitativeSetup  {
+			width: 98.5vw;
+		}
+
+		.quantitativeSetup div {
+			display: inline-block;
+			text-align: center;
+		}
+
+		#quantitativeValuesTable td {
+			background: none;
+		}
+
+		#quantitativeValuesTable td:nth-child(5),
+		#quantitativeValuesTable td:nth-child(9),
+		#quantitativeValuesTable td:nth-child(13) {
+			background-color: #f0fff8;
+		}
+
+		#quantitativeValuesTable td:nth-child(6),
+		#quantitativeValuesTable td:nth-child(10),
+		#quantitativeValuesTable td:nth-child(14) {
+			background-color: aliceblue;
+		}
+
+		#frequencyTable td:hover,
+		#quantitativeValuesTable td:hover {
+			color: white;
+			background-color: blue;
+		}
+
+		.fullTable td:nth-child(1n) {
+			background-color: #f0fff8;
+		}
+
+		.fullTable td:nth-child(2n) {
+			background-color: aliceblue;
+		}
+
+		.productDescription {
+			width: 13.3vw;
+		}
+
+		.searchTerm {
+			width: 12vw;
+		}
+
+		.fullTable {
+			padding-bottom: 1vw;
+		}
+
+		h3 {
+			font-family: sans-serif;
+		}
+
+		.hide {
+			display: none;
+		}
+
+		th[data-sorted-direction]:after {
+			content: '';
+			border: 0.3vw solid transparent;
+			display: inline-block;
+			width: 0;
+			height: 0;
+			margin-left: 0.2vw;
+		}
+
+		th[data-sorted-direction="descending"]:after {
+			border-top: 0.3vw solid white;
+			border-bottom: 0;
+		}
+
+		th[data-sorted-direction="ascending"]:after {
+			border-bottom: 0.3vw solid white;
+			border-top: 0;
+			margin-bottom: 0.25vw;
+		}
+
+		th {
+			font-family: sans-serif;
+			white-space: nowrap;
+			border-collapse: collapse;
+			border-spacing: 0;
+			border: none;
+		}
+
+		th[data-sorted-direction="ascending"],
+		th[data-sorted-direction="descending"] {
+			background-color: blue;
+			color: white;
+		}
+
+		input[type='button'] {
+			border-radius: 0.5vw;
+		}
+
+		input[type='number'] {
+			padding: 0 0 0 0.3vw;
+			font-family: sans-serif;
+			line-height: 1.5;
+			/*font-size: 150%;*/
+		}
+
+		input[max='4'] {
+			width: 2.5vw;
+		}
+
+		input[max='100'] {
+			width: 25vw;
+		}
+
+		th input {
+			line-height: 2;
+			width: 100%;
+			letter-spacing: 0;
+			vertical-align: top;
+			color: black;
+			border: none;
+			padding: 0;
+			margin: 0;
+			background-color: white;
+			caret-color: black;
+		}
+
+		/** override hardcoded style in form fields with autocomplete in chrome*/
+		th input:-webkit-autofill {
+			-webkit-text-fill-color: white;
+			-webkit-animation-name: autofill;
+			-webkit-animation-fill-mode: both;
+		}
+
+		 /**override hardcoded style in form fields with autocomplete in chrome*/
+		@-webkit-keyframes autofill {
+			to {
+				background: transparent;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<p>
+	<input type="button" id="refresh" onclick="location.reload(true)" value="начать с начала"> <input type="file" id="fileInput" name="file" accept="text/csv" onchange="parseFile()">
+</p>
+
+<div id="competitorsHeader"></div>
+<div id="competitors"></div>
+
+<div id="frequencyHeader"></div>
+<div id="frequency"></div>
+
+<div id="quantitativeValuesHeader"></div>
+<div id="quantitativeValues"></div>
+
+</body>
+<script>
+// clipboard and papaparse minified libs
+!function(t,e){"object"==typeof exports&&"object"==typeof module?module.exports=e():"function"==typeof define&&define.amd?define([],e):"object"==typeof exports?exports.ClipboardJS=e():t.ClipboardJS=e()}(this,function(){return function(n){var o={};function r(t){if(o[t])return o[t].exports;var e=o[t]={i:t,l:!1,exports:{}};return n[t].call(e.exports,e,e.exports,r),e.l=!0,e.exports}return r.m=n,r.c=o,r.d=function(t,e,n){r.o(t,e)||Object.defineProperty(t,e,{enumerable:!0,get:n})},r.r=function(t){"undefined"!=typeof Symbol&&Symbol.toStringTag&&Object.defineProperty(t,Symbol.toStringTag,{value:"Module"}),Object.defineProperty(t,"__esModule",{value:!0})},r.t=function(e,t){if(1&t&&(e=r(e)),8&t)return e;if(4&t&&"object"==typeof e&&e&&e.__esModule)return e;var n=Object.create(null);if(r.r(n),Object.defineProperty(n,"default",{enumerable:!0,value:e}),2&t&&"string"!=typeof e)for(var o in e)r.d(n,o,function(t){return e[t]}.bind(null,o));return n},r.n=function(t){var e=t&&t.__esModule?function(){return t.default}:function(){return t};return r.d(e,"a",e),e},r.o=function(t,e){return Object.prototype.hasOwnProperty.call(t,e)},r.p="",r(r.s=0)}([function(t,e,n){"use strict";var r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i=function(){function o(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(t,e,n){return e&&o(t.prototype,e),n&&o(t,n),t}}(),a=o(n(1)),c=o(n(3)),u=o(n(4));function o(t){return t&&t.__esModule?t:{default:t}}var l=function(t){function o(t,e){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,o);var n=function(t,e){if(!t)throw new ReferenceError("this hasn't been initialised - super() hasn't been called");return!e||"object"!=typeof e&&"function"!=typeof e?t:e}(this,(o.__proto__||Object.getPrototypeOf(o)).call(this));return n.resolveOptions(e),n.listenClick(t),n}return function(t,e){if("function"!=typeof e&&null!==e)throw new TypeError("Super expression must either be null or a function, not "+typeof e);t.prototype=Object.create(e&&e.prototype,{constructor:{value:t,enumerable:!1,writable:!0,configurable:!0}}),e&&(Object.setPrototypeOf?Object.setPrototypeOf(t,e):t.__proto__=e)}(o,c.default),i(o,[{key:"resolveOptions",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{};this.action="function"==typeof t.action?t.action:this.defaultAction,this.target="function"==typeof t.target?t.target:this.defaultTarget,this.text="function"==typeof t.text?t.text:this.defaultText,this.container="object"===r(t.container)?t.container:document.body}},{key:"listenClick",value:function(t){var e=this;this.listener=(0,u.default)(t,"click",function(t){return e.onClick(t)})}},{key:"onClick",value:function(t){var e=t.delegateTarget||t.currentTarget;this.clipboardAction&&(this.clipboardAction=null),this.clipboardAction=new a.default({action:this.action(e),target:this.target(e),text:this.text(e),container:this.container,trigger:e,emitter:this})}},{key:"defaultAction",value:function(t){return s("action",t)}},{key:"defaultTarget",value:function(t){var e=s("target",t);if(e)return document.querySelector(e)}},{key:"defaultText",value:function(t){return s("text",t)}},{key:"destroy",value:function(){this.listener.destroy(),this.clipboardAction&&(this.clipboardAction.destroy(),this.clipboardAction=null)}}],[{key:"isSupported",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:["copy","cut"],e="string"==typeof t?[t]:t,n=!!document.queryCommandSupported;return e.forEach(function(t){n=n&&!!document.queryCommandSupported(t)}),n}}]),o}();function s(t,e){var n="data-clipboard-"+t;if(e.hasAttribute(n))return e.getAttribute(n)}t.exports=l},function(t,e,n){"use strict";var o,r="function"==typeof Symbol&&"symbol"==typeof Symbol.iterator?function(t){return typeof t}:function(t){return t&&"function"==typeof Symbol&&t.constructor===Symbol&&t!==Symbol.prototype?"symbol":typeof t},i=function(){function o(t,e){for(var n=0;n<e.length;n++){var o=e[n];o.enumerable=o.enumerable||!1,o.configurable=!0,"value"in o&&(o.writable=!0),Object.defineProperty(t,o.key,o)}}return function(t,e,n){return e&&o(t.prototype,e),n&&o(t,n),t}}(),a=n(2),c=(o=a)&&o.__esModule?o:{default:o};var u=function(){function e(t){!function(t,e){if(!(t instanceof e))throw new TypeError("Cannot call a class as a function")}(this,e),this.resolveOptions(t),this.initSelection()}return i(e,[{key:"resolveOptions",value:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:{};this.action=t.action,this.container=t.container,this.emitter=t.emitter,this.target=t.target,this.text=t.text,this.trigger=t.trigger,this.selectedText=""}},{key:"initSelection",value:function(){this.text?this.selectFake():this.target&&this.selectTarget()}},{key:"selectFake",value:function(){var t=this,e="rtl"==document.documentElement.getAttribute("dir");this.removeFake(),this.fakeHandlerCallback=function(){return t.removeFake()},this.fakeHandler=this.container.addEventListener("click",this.fakeHandlerCallback)||!0,this.fakeElem=document.createElement("textarea"),this.fakeElem.style.fontSize="12pt",this.fakeElem.style.border="0",this.fakeElem.style.padding="0",this.fakeElem.style.margin="0",this.fakeElem.style.position="absolute",this.fakeElem.style[e?"right":"left"]="-9999px";var n=window.pageYOffset||document.documentElement.scrollTop;this.fakeElem.style.top=n+"px",this.fakeElem.setAttribute("readonly",""),this.fakeElem.value=this.text,this.container.appendChild(this.fakeElem),this.selectedText=(0,c.default)(this.fakeElem),this.copyText()}},{key:"removeFake",value:function(){this.fakeHandler&&(this.container.removeEventListener("click",this.fakeHandlerCallback),this.fakeHandler=null,this.fakeHandlerCallback=null),this.fakeElem&&(this.container.removeChild(this.fakeElem),this.fakeElem=null)}},{key:"selectTarget",value:function(){this.selectedText=(0,c.default)(this.target),this.copyText()}},{key:"copyText",value:function(){var e=void 0;try{e=document.execCommand(this.action)}catch(t){e=!1}this.handleResult(e)}},{key:"handleResult",value:function(t){this.emitter.emit(t?"success":"error",{action:this.action,text:this.selectedText,trigger:this.trigger,clearSelection:this.clearSelection.bind(this)})}},{key:"clearSelection",value:function(){this.trigger&&this.trigger.focus(),window.getSelection().removeAllRanges()}},{key:"destroy",value:function(){this.removeFake()}},{key:"action",set:function(){var t=0<arguments.length&&void 0!==arguments[0]?arguments[0]:"copy";if(this._action=t,"copy"!==this._action&&"cut"!==this._action)throw new Error('Invalid "action" value, use either "copy" or "cut"')},get:function(){return this._action}},{key:"target",set:function(t){if(void 0!==t){if(!t||"object"!==(void 0===t?"undefined":r(t))||1!==t.nodeType)throw new Error('Invalid "target" value, use a valid Element');if("copy"===this.action&&t.hasAttribute("disabled"))throw new Error('Invalid "target" attribute. Please use "readonly" instead of "disabled" attribute');if("cut"===this.action&&(t.hasAttribute("readonly")||t.hasAttribute("disabled")))throw new Error('Invalid "target" attribute. You can\'t cut text from elements with "readonly" or "disabled" attributes');this._target=t}},get:function(){return this._target}}]),e}();t.exports=u},function(t,e){t.exports=function(t){var e;if("SELECT"===t.nodeName)t.focus(),e=t.value;else if("INPUT"===t.nodeName||"TEXTAREA"===t.nodeName){var n=t.hasAttribute("readonly");n||t.setAttribute("readonly",""),t.select(),t.setSelectionRange(0,t.value.length),n||t.removeAttribute("readonly"),e=t.value}else{t.hasAttribute("contenteditable")&&t.focus();var o=window.getSelection(),r=document.createRange();r.selectNodeContents(t),o.removeAllRanges(),o.addRange(r),e=o.toString()}return e}},function(t,e){function n(){}n.prototype={on:function(t,e,n){var o=this.e||(this.e={});return(o[t]||(o[t]=[])).push({fn:e,ctx:n}),this},once:function(t,e,n){var o=this;function r(){o.off(t,r),e.apply(n,arguments)}return r._=e,this.on(t,r,n)},emit:function(t){for(var e=[].slice.call(arguments,1),n=((this.e||(this.e={}))[t]||[]).slice(),o=0,r=n.length;o<r;o++)n[o].fn.apply(n[o].ctx,e);return this},off:function(t,e){var n=this.e||(this.e={}),o=n[t],r=[];if(o&&e)for(var i=0,a=o.length;i<a;i++)o[i].fn!==e&&o[i].fn._!==e&&r.push(o[i]);return r.length?n[t]=r:delete n[t],this}},t.exports=n},function(t,e,n){var d=n(5),h=n(6);t.exports=function(t,e,n){if(!t&&!e&&!n)throw new Error("Missing required arguments");if(!d.string(e))throw new TypeError("Second argument must be a String");if(!d.fn(n))throw new TypeError("Third argument must be a Function");if(d.node(t))return s=e,f=n,(l=t).addEventListener(s,f),{destroy:function(){l.removeEventListener(s,f)}};if(d.nodeList(t))return a=t,c=e,u=n,Array.prototype.forEach.call(a,function(t){t.addEventListener(c,u)}),{destroy:function(){Array.prototype.forEach.call(a,function(t){t.removeEventListener(c,u)})}};if(d.string(t))return o=t,r=e,i=n,h(document.body,o,r,i);throw new TypeError("First argument must be a String, HTMLElement, HTMLCollection, or NodeList");var o,r,i,a,c,u,l,s,f}},function(t,n){n.node=function(t){return void 0!==t&&t instanceof HTMLElement&&1===t.nodeType},n.nodeList=function(t){var e=Object.prototype.toString.call(t);return void 0!==t&&("[object NodeList]"===e||"[object HTMLCollection]"===e)&&"length"in t&&(0===t.length||n.node(t[0]))},n.string=function(t){return"string"==typeof t||t instanceof String},n.fn=function(t){return"[object Function]"===Object.prototype.toString.call(t)}},function(t,e,n){var a=n(7);function i(t,e,n,o,r){var i=function(e,n,t,o){return function(t){t.delegateTarget=a(t.target,n),t.delegateTarget&&o.call(e,t)}}.apply(this,arguments);return t.addEventListener(n,i,r),{destroy:function(){t.removeEventListener(n,i,r)}}}t.exports=function(t,e,n,o,r){return"function"==typeof t.addEventListener?i.apply(null,arguments):"function"==typeof n?i.bind(null,document).apply(null,arguments):("string"==typeof t&&(t=document.querySelectorAll(t)),Array.prototype.map.call(t,function(t){return i(t,e,n,o,r)}))}},function(t,e){if("undefined"!=typeof Element&&!Element.prototype.matches){var n=Element.prototype;n.matches=n.matchesSelector||n.mozMatchesSelector||n.msMatchesSelector||n.oMatchesSelector||n.webkitMatchesSelector}t.exports=function(t,e){for(;t&&9!==t.nodeType;){if("function"==typeof t.matches&&t.matches(e))return t;t=t.parentNode}}}])});!function(e,t){"function"==typeof define&&define.amd?define([],t):"object"==typeof module&&"undefined"!=typeof exports?module.exports=t():e.Papa=t()}(this,function s(){"use strict";var f="undefined"!=typeof self?self:"undefined"!=typeof window?window:void 0!==f?f:{};var n=!f.document&&!!f.postMessage,o=n&&/blob:/i.test((f.location||{}).protocol),a={},h=0,b={parse:function(e,t){var r=(t=t||{}).dynamicTyping||!1;q(r)&&(t.dynamicTypingFunction=r,r={});if(t.dynamicTyping=r,t.transform=!!q(t.transform)&&t.transform,t.worker&&b.WORKERS_SUPPORTED){var i=function(){if(!b.WORKERS_SUPPORTED)return!1;var e=(r=f.URL||f.webkitURL||null,i=s.toString(),b.BLOB_URL||(b.BLOB_URL=r.createObjectURL(new Blob(["(",i,")();"],{type:"text/javascript"})))),t=new f.Worker(e);var r,i;return t.onmessage=_,t.id=h++,a[t.id]=t}();return i.userStep=t.step,i.userChunk=t.chunk,i.userComplete=t.complete,i.userError=t.error,t.step=q(t.step),t.chunk=q(t.chunk),t.complete=q(t.complete),t.error=q(t.error),delete t.worker,void i.postMessage({input:e,config:t,workerId:i.id})}var n=null;b.NODE_STREAM_INPUT,"string"==typeof e?n=t.download?new l(t):new p(t):!0===e.readable&&q(e.read)&&q(e.on)?n=new m(t):(f.File&&e instanceof File||e instanceof Object)&&(n=new c(t));return n.stream(e)},unparse:function(e,t){var i=!1,_=!0,g=",",v="\r\n",n='"',s=n+n,r=!1,a=null;!function(){if("object"!=typeof t)return;"string"!=typeof t.delimiter||b.BAD_DELIMITERS.filter(function(e){return-1!==t.delimiter.indexOf(e)}).length||(g=t.delimiter);("boolean"==typeof t.quotes||Array.isArray(t.quotes))&&(i=t.quotes);"boolean"!=typeof t.skipEmptyLines&&"string"!=typeof t.skipEmptyLines||(r=t.skipEmptyLines);"string"==typeof t.newline&&(v=t.newline);"string"==typeof t.quoteChar&&(n=t.quoteChar);"boolean"==typeof t.header&&(_=t.header);if(Array.isArray(t.columns)){if(0===t.columns.length)throw new Error("Option columns is empty");a=t.columns}void 0!==t.escapeChar&&(s=t.escapeChar+n)}();var o=new RegExp(U(n),"g");"string"==typeof e&&(e=JSON.parse(e));if(Array.isArray(e)){if(!e.length||Array.isArray(e[0]))return u(null,e,r);if("object"==typeof e[0])return u(a||h(e[0]),e,r)}else if("object"==typeof e)return"string"==typeof e.data&&(e.data=JSON.parse(e.data)),Array.isArray(e.data)&&(e.fields||(e.fields=e.meta&&e.meta.fields),e.fields||(e.fields=Array.isArray(e.data[0])?e.fields:h(e.data[0])),Array.isArray(e.data[0])||"object"==typeof e.data[0]||(e.data=[e.data])),u(e.fields||[],e.data||[],r);throw new Error("Unable to serialize unrecognized input");function h(e){if("object"!=typeof e)return[];var t=[];for(var r in e)t.push(r);return t}function u(e,t,r){var i="";"string"==typeof e&&(e=JSON.parse(e)),"string"==typeof t&&(t=JSON.parse(t));var n=Array.isArray(e)&&0<e.length,s=!Array.isArray(t[0]);if(n&&_){for(var a=0;a<e.length;a++)0<a&&(i+=g),i+=y(e[a],a);0<t.length&&(i+=v)}for(var o=0;o<t.length;o++){var h=n?e.length:t[o].length,u=!1,f=n?0===Object.keys(t[o]).length:0===t[o].length;if(r&&!n&&(u="greedy"===r?""===t[o].join("").trim():1===t[o].length&&0===t[o][0].length),"greedy"===r&&n){for(var d=[],l=0;l<h;l++){var c=s?e[l]:l;d.push(t[o][c])}u=""===d.join("").trim()}if(!u){for(var p=0;p<h;p++){0<p&&!f&&(i+=g);var m=n&&s?e[p]:p;i+=y(t[o][m],p)}o<t.length-1&&(!r||0<h&&!f)&&(i+=v)}}return i}function y(e,t){if(null==e)return"";if(e.constructor===Date)return JSON.stringify(e).slice(1,25);e=e.toString().replace(o,s);var r="boolean"==typeof i&&i||Array.isArray(i)&&i[t]||function(e,t){for(var r=0;r<t.length;r++)if(-1<e.indexOf(t[r]))return!0;return!1}(e,b.BAD_DELIMITERS)||-1<e.indexOf(g)||" "===e.charAt(0)||" "===e.charAt(e.length-1);return r?n+e+n:e}}};if(b.RECORD_SEP=String.fromCharCode(30),b.UNIT_SEP=String.fromCharCode(31),b.BYTE_ORDER_MARK="\ufeff",b.BAD_DELIMITERS=["\r","\n",'"',b.BYTE_ORDER_MARK],b.WORKERS_SUPPORTED=!n&&!!f.Worker,b.NODE_STREAM_INPUT=1,b.LocalChunkSize=10485760,b.RemoteChunkSize=5242880,b.DefaultDelimiter=",",b.Parser=E,b.ParserHandle=r,b.NetworkStreamer=l,b.FileStreamer=c,b.StringStreamer=p,b.ReadableStreamStreamer=m,f.jQuery){var d=f.jQuery;d.fn.parse=function(o){var r=o.config||{},h=[];return this.each(function(e){if(!("INPUT"===d(this).prop("tagName").toUpperCase()&&"file"===d(this).attr("type").toLowerCase()&&f.FileReader)||!this.files||0===this.files.length)return!0;for(var t=0;t<this.files.length;t++)h.push({file:this.files[t],inputElem:this,instanceConfig:d.extend({},r)})}),e(),this;function e(){if(0!==h.length){var e,t,r,i,n=h[0];if(q(o.before)){var s=o.before(n.file,n.inputElem);if("object"==typeof s){if("abort"===s.action)return e="AbortError",t=n.file,r=n.inputElem,i=s.reason,void(q(o.error)&&o.error({name:e},t,r,i));if("skip"===s.action)return void u();"object"==typeof s.config&&(n.instanceConfig=d.extend(n.instanceConfig,s.config))}else if("skip"===s)return void u()}var a=n.instanceConfig.complete;n.instanceConfig.complete=function(e){q(a)&&a(e,n.file,n.inputElem),u()},b.parse(n.file,n.instanceConfig)}else q(o.complete)&&o.complete()}function u(){h.splice(0,1),e()}}}function u(e){this._handle=null,this._finished=!1,this._completed=!1,this._halted=!1,this._input=null,this._baseIndex=0,this._partialLine="",this._rowCount=0,this._start=0,this._nextChunk=null,this.isFirstChunk=!0,this._completeResults={data:[],errors:[],meta:{}},function(e){var t=w(e);t.chunkSize=parseInt(t.chunkSize),e.step||e.chunk||(t.chunkSize=null);this._handle=new r(t),(this._handle.streamer=this)._config=t}.call(this,e),this.parseChunk=function(e,t){if(this.isFirstChunk&&q(this._config.beforeFirstChunk)){var r=this._config.beforeFirstChunk(e);void 0!==r&&(e=r)}this.isFirstChunk=!1,this._halted=!1;var i=this._partialLine+e;this._partialLine="";var n=this._handle.parse(i,this._baseIndex,!this._finished);if(!this._handle.paused()&&!this._handle.aborted()){var s=n.meta.cursor;this._finished||(this._partialLine=i.substring(s-this._baseIndex),this._baseIndex=s),n&&n.data&&(this._rowCount+=n.data.length);var a=this._finished||this._config.preview&&this._rowCount>=this._config.preview;if(o)f.postMessage({results:n,workerId:b.WORKER_ID,finished:a});else if(q(this._config.chunk)&&!t){if(this._config.chunk(n,this._handle),this._handle.paused()||this._handle.aborted())return void(this._halted=!0);n=void 0,this._completeResults=void 0}return this._config.step||this._config.chunk||(this._completeResults.data=this._completeResults.data.concat(n.data),this._completeResults.errors=this._completeResults.errors.concat(n.errors),this._completeResults.meta=n.meta),this._completed||!a||!q(this._config.complete)||n&&n.meta.aborted||(this._config.complete(this._completeResults,this._input),this._completed=!0),a||n&&n.meta.paused||this._nextChunk(),n}this._halted=!0},this._sendError=function(e){q(this._config.error)?this._config.error(e):o&&this._config.error&&f.postMessage({workerId:b.WORKER_ID,error:e,finished:!1})}}function l(e){var i;(e=e||{}).chunkSize||(e.chunkSize=b.RemoteChunkSize),u.call(this,e),this._nextChunk=n?function(){this._readChunk(),this._chunkLoaded()}:function(){this._readChunk()},this.stream=function(e){this._input=e,this._nextChunk()},this._readChunk=function(){if(this._finished)this._chunkLoaded();else{if(i=new XMLHttpRequest,this._config.withCredentials&&(i.withCredentials=this._config.withCredentials),n||(i.onload=y(this._chunkLoaded,this),i.onerror=y(this._chunkError,this)),i.open("GET",this._input,!n),this._config.downloadRequestHeaders){var e=this._config.downloadRequestHeaders;for(var t in e)i.setRequestHeader(t,e[t])}if(this._config.chunkSize){var r=this._start+this._config.chunkSize-1;i.setRequestHeader("Range","bytes="+this._start+"-"+r)}try{i.send()}catch(e){this._chunkError(e.message)}n&&0===i.status?this._chunkError():this._start+=this._config.chunkSize}},this._chunkLoaded=function(){4===i.readyState&&(i.status<200||400<=i.status?this._chunkError():(this._finished=!this._config.chunkSize||this._start>function(e){var t=e.getResponseHeader("Content-Range");if(null===t)return-1;return parseInt(t.substr(t.lastIndexOf("/")+1))}(i),this.parseChunk(i.responseText)))},this._chunkError=function(e){var t=i.statusText||e;this._sendError(new Error(t))}}function c(e){var i,n;(e=e||{}).chunkSize||(e.chunkSize=b.LocalChunkSize),u.call(this,e);var s="undefined"!=typeof FileReader;this.stream=function(e){this._input=e,n=e.slice||e.webkitSlice||e.mozSlice,s?((i=new FileReader).onload=y(this._chunkLoaded,this),i.onerror=y(this._chunkError,this)):i=new FileReaderSync,this._nextChunk()},this._nextChunk=function(){this._finished||this._config.preview&&!(this._rowCount<this._config.preview)||this._readChunk()},this._readChunk=function(){var e=this._input;if(this._config.chunkSize){var t=Math.min(this._start+this._config.chunkSize,this._input.size);e=n.call(e,this._start,t)}var r=i.readAsText(e,this._config.encoding);s||this._chunkLoaded({target:{result:r}})},this._chunkLoaded=function(e){this._start+=this._config.chunkSize,this._finished=!this._config.chunkSize||this._start>=this._input.size,this.parseChunk(e.target.result)},this._chunkError=function(){this._sendError(i.error)}}function p(e){var r;u.call(this,e=e||{}),this.stream=function(e){return r=e,this._nextChunk()},this._nextChunk=function(){if(!this._finished){var e=this._config.chunkSize,t=e?r.substr(0,e):r;return r=e?r.substr(e):"",this._finished=!r,this.parseChunk(t)}}}function m(e){u.call(this,e=e||{});var t=[],r=!0,i=!1;this.pause=function(){u.prototype.pause.apply(this,arguments),this._input.pause()},this.resume=function(){u.prototype.resume.apply(this,arguments),this._input.resume()},this.stream=function(e){this._input=e,this._input.on("data",this._streamData),this._input.on("end",this._streamEnd),this._input.on("error",this._streamError)},this._checkIsFinished=function(){i&&1===t.length&&(this._finished=!0)},this._nextChunk=function(){this._checkIsFinished(),t.length?this.parseChunk(t.shift()):r=!0},this._streamData=y(function(e){try{t.push("string"==typeof e?e:e.toString(this._config.encoding)),r&&(r=!1,this._checkIsFinished(),this.parseChunk(t.shift()))}catch(e){this._streamError(e)}},this),this._streamError=y(function(e){this._streamCleanUp(),this._sendError(e)},this),this._streamEnd=y(function(){this._streamCleanUp(),i=!0,this._streamData("")},this),this._streamCleanUp=y(function(){this._input.removeListener("data",this._streamData),this._input.removeListener("end",this._streamEnd),this._input.removeListener("error",this._streamError)},this)}function r(g){var a,o,h,i=Math.pow(2,53),n=-i,s=/^\s*-?(\d*\.?\d+|\d+\.?\d*)(e[-+]?\d+)?\s*$/i,u=/(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d\.\d+([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))|(\d{4}-[01]\d-[0-3]\dT[0-2]\d:[0-5]\d([+-][0-2]\d:[0-5]\d|Z))/,t=this,r=0,f=0,d=!1,e=!1,l=[],c={data:[],errors:[],meta:{}};if(q(g.step)){var p=g.step;g.step=function(e){if(c=e,_())m();else{if(m(),0===c.data.length)return;r+=e.data.length,g.preview&&r>g.preview?o.abort():p(c,t)}}}function v(e){return"greedy"===g.skipEmptyLines?""===e.join("").trim():1===e.length&&0===e[0].length}function m(){if(c&&h&&(k("Delimiter","UndetectableDelimiter","Unable to auto-detect delimiting character; defaulted to '"+b.DefaultDelimiter+"'"),h=!1),g.skipEmptyLines)for(var e=0;e<c.data.length;e++)v(c.data[e])&&c.data.splice(e--,1);return _()&&function(){if(!c)return;function e(e){q(g.transformHeader)&&(e=g.transformHeader(e)),l.push(e)}if(Array.isArray(c.data[0])){for(var t=0;_()&&t<c.data.length;t++)c.data[t].forEach(e);c.data.splice(0,1)}else c.data.forEach(e)}(),function(){if(!c||!g.header&&!g.dynamicTyping&&!g.transform)return c;function e(e,t){var r,i=g.header?{}:[];for(r=0;r<e.length;r++){var n=r,s=e[r];g.header&&(n=r>=l.length?"__parsed_extra":l[r]),g.transform&&(s=g.transform(s,n)),s=y(n,s),"__parsed_extra"===n?(i[n]=i[n]||[],i[n].push(s)):i[n]=s}return g.header&&(r>l.length?k("FieldMismatch","TooManyFields","Too many fields: expected "+l.length+" fields but parsed "+r,f+t):r<l.length&&k("FieldMismatch","TooFewFields","Too few fields: expected "+l.length+" fields but parsed "+r,f+t)),i}var t=1;!c.data[0]||Array.isArray(c.data[0])?(c.data=c.data.map(e),t=c.data.length):c.data=e(c.data,0);g.header&&c.meta&&(c.meta.fields=l);return f+=t,c}()}function _(){return g.header&&0===l.length}function y(e,t){return r=e,g.dynamicTypingFunction&&void 0===g.dynamicTyping[r]&&(g.dynamicTyping[r]=g.dynamicTypingFunction(r)),!0===(g.dynamicTyping[r]||g.dynamicTyping)?"true"===t||"TRUE"===t||"false"!==t&&"FALSE"!==t&&(function(e){if(s.test(e)){var t=parseFloat(e);if(n<t&&t<i)return!0}return!1}(t)?parseFloat(t):u.test(t)?new Date(t):""===t?null:t):t;var r}function k(e,t,r,i){c.errors.push({type:e,code:t,message:r,row:i})}this.parse=function(e,t,r){var i=g.quoteChar||'"';if(g.newline||(g.newline=function(e,t){e=e.substr(0,1048576);var r=new RegExp(U(t)+"([^]*?)"+U(t),"gm"),i=(e=e.replace(r,"")).split("\r"),n=e.split("\n"),s=1<n.length&&n[0].length<i[0].length;if(1===i.length||s)return"\n";for(var a=0,o=0;o<i.length;o++)"\n"===i[o][0]&&a++;return a>=i.length/2?"\r\n":"\r"}(e,i)),h=!1,g.delimiter)q(g.delimiter)&&(g.delimiter=g.delimiter(e),c.meta.delimiter=g.delimiter);else{var n=function(e,t,r,i,n){var s,a,o,h;n=n||[",","\t","|",";",b.RECORD_SEP,b.UNIT_SEP];for(var u=0;u<n.length;u++){var f=n[u],d=0,l=0,c=0;o=void 0;for(var p=new E({comments:i,delimiter:f,newline:t,preview:10}).parse(e),m=0;m<p.data.length;m++)if(r&&v(p.data[m]))c++;else{var _=p.data[m].length;l+=_,void 0!==o?0<_&&(d+=Math.abs(_-o),o=_):o=_}0<p.data.length&&(l/=p.data.length-c),(void 0===a||d<=a)&&(void 0===h||h<l)&&1.99<l&&(a=d,s=f,h=l)}return{successful:!!(g.delimiter=s),bestDelimiter:s}}(e,g.newline,g.skipEmptyLines,g.comments,g.delimitersToGuess);n.successful?g.delimiter=n.bestDelimiter:(h=!0,g.delimiter=b.DefaultDelimiter),c.meta.delimiter=g.delimiter}var s=w(g);return g.preview&&g.header&&s.preview++,a=e,o=new E(s),c=o.parse(a,t,r),m(),d?{meta:{paused:!0}}:c||{meta:{paused:!1}}},this.paused=function(){return d},this.pause=function(){d=!0,o.abort(),a=a.substr(o.getCharIndex())},this.resume=function(){t.streamer._halted?(d=!1,t.streamer.parseChunk(a,!0)):setTimeout(this.resume,3)},this.aborted=function(){return e},this.abort=function(){e=!0,o.abort(),c.meta.aborted=!0,q(g.complete)&&g.complete(c),a=""}}function U(e){return e.replace(/[.*+?^${}()|[\]\\]/g,"\\$&")}function E(e){var O,D=(e=e||{}).delimiter,I=e.newline,T=e.comments,A=e.step,L=e.preview,F=e.fastMode,z=O=void 0===e.quoteChar?'"':e.quoteChar;if(void 0!==e.escapeChar&&(z=e.escapeChar),("string"!=typeof D||-1<b.BAD_DELIMITERS.indexOf(D))&&(D=","),T===D)throw new Error("Comment character same as delimiter");!0===T?T="#":("string"!=typeof T||-1<b.BAD_DELIMITERS.indexOf(T))&&(T=!1),"\n"!==I&&"\r"!==I&&"\r\n"!==I&&(I="\n");var M=0,j=!1;this.parse=function(a,r,t){if("string"!=typeof a)throw new Error("Input must be a string");var i=a.length,e=D.length,n=I.length,s=T.length,o=q(A),h=[],u=[],f=[],d=M=0;if(!a)return R();if(F||!1!==F&&-1===a.indexOf(O)){for(var l=a.split(I),c=0;c<l.length;c++){if(f=l[c],M+=f.length,c!==l.length-1)M+=I.length;else if(t)return R();if(!T||f.substr(0,s)!==T){if(o){if(h=[],b(f.split(D)),S(),j)return R()}else b(f.split(D));if(L&&L<=c)return h=h.slice(0,L),R(!0)}}return R()}for(var p=a.indexOf(D,M),m=a.indexOf(I,M),_=new RegExp(U(z)+U(O),"g"),g=a.indexOf(O,M);;)if(a[M]!==O)if(T&&0===f.length&&a.substr(M,s)===T){if(-1===m)return R();M=m+n,m=a.indexOf(I,M),p=a.indexOf(D,M)}else{if(-1!==p&&(p<m||-1===m)){if(-1===g){f.push(a.substring(M,p)),M=p+e,p=a.indexOf(D,M);continue}var v=x(p,g,m);if(v&&void 0!==v.nextDelim){p=v.nextDelim,g=v.quoteSearch,f.push(a.substring(M,p)),M=p+e,p=a.indexOf(D,M);continue}}if(-1===m)break;if(f.push(a.substring(M,m)),C(m+n),o&&(S(),j))return R();if(L&&h.length>=L)return R(!0)}else for(g=M,M++;;){if(-1===(g=a.indexOf(O,g+1)))return t||u.push({type:"Quotes",code:"MissingQuotes",message:"Quoted field unterminated",row:h.length,index:M}),w();if(g===i-1)return w(a.substring(M,g).replace(_,O));if(O!==z||a[g+1]!==z){if(O===z||0===g||a[g-1]!==z){var y=E(-1===m?p:Math.min(p,m));if(a[g+1+y]===D){f.push(a.substring(M,g).replace(_,O)),a[M=g+1+y+e]!==O&&(g=a.indexOf(O,M)),p=a.indexOf(D,M),m=a.indexOf(I,M);break}var k=E(m);if(a.substr(g+1+k,n)===I){if(f.push(a.substring(M,g).replace(_,O)),C(g+1+k+n),p=a.indexOf(D,M),g=a.indexOf(O,M),o&&(S(),j))return R();if(L&&h.length>=L)return R(!0);break}u.push({type:"Quotes",code:"InvalidQuotes",message:"Trailing quote on quoted field is malformed",row:h.length,index:M}),g++}}else g++}return w();function b(e){h.push(e),d=M}function E(e){var t=0;if(-1!==e){var r=a.substring(g+1,e);r&&""===r.trim()&&(t=r.length)}return t}function w(e){return t||(void 0===e&&(e=a.substr(M)),f.push(e),M=i,b(f),o&&S()),R()}function C(e){M=e,b(f),f=[],m=a.indexOf(I,M)}function R(e,t){return{data:t||!1?h[0]:h,errors:u,meta:{delimiter:D,linebreak:I,aborted:j,truncated:!!e,cursor:d+(r||0)}}}function S(){A(R(void 0,!0)),h=[],u=[]}function x(e,t,r){var i={nextDelim:void 0,quoteSearch:void 0},n=a.indexOf(O,t+1);if(t<e&&e<n&&(n<r||-1===r)){var s=a.indexOf(D,n);if(-1===s)return i;n<s&&(n=a.indexOf(O,n+1)),i=x(s,n,r)}else i={nextDelim:e,quoteSearch:t};return i}},this.abort=function(){j=!0},this.getCharIndex=function(){return M}}function _(e){var t=e.data,r=a[t.workerId],i=!1;if(t.error)r.userError(t.error,t.file);else if(t.results&&t.results.data){var n={abort:function(){i=!0,g(t.workerId,{data:[],errors:[],meta:{aborted:!0}})},pause:v,resume:v};if(q(r.userStep)){for(var s=0;s<t.results.data.length&&(r.userStep({data:t.results.data[s],errors:t.results.errors,meta:t.results.meta},n),!i);s++);delete t.results}else q(r.userChunk)&&(r.userChunk(t.results,n,t.file),delete t.results)}t.finished&&!i&&g(t.workerId,t.results)}function g(e,t){var r=a[e];q(r.userComplete)&&r.userComplete(t),r.terminate(),delete a[e]}function v(){throw new Error("Not implemented.")}function w(e){if("object"!=typeof e||null===e)return e;var t=Array.isArray(e)?[]:{};for(var r in e)t[r]=w(e[r]);return t}function y(e,t){return function(){e.apply(t,arguments)}}function q(e){return"function"==typeof e}return o&&(f.onmessage=function(e){var t=e.data;void 0===b.WORKER_ID&&t&&(b.WORKER_ID=t.workerId);if("string"==typeof t.input)f.postMessage({workerId:b.WORKER_ID,results:b.parse(t.input,t.config),finished:!0});else if(f.File&&t.input instanceof File||t.input instanceof Object){var r=b.parse(t.input,t.config);r&&f.postMessage({workerId:b.WORKER_ID,results:r,finished:!0})}}),(l.prototype=Object.create(u.prototype)).constructor=l,(c.prototype=Object.create(u.prototype)).constructor=c,(p.prototype=Object.create(p.prototype)).constructor=p,(m.prototype=Object.create(u.prototype)).constructor=m,b});
+</script>
+<script>
+let analyse = {
+    // размерность для столбцов Click (количество цифр)
+    capacityClick: 4,
+
+    // максимально допустимая погрешность для столбцов Click в числовом выражении (проценты поделить на 100)
+    accuracyClick: 0.001,
+
+    // размерность для столбцов Conversion (количество цифр)
+    capacityConversion: 4,
+
+    // максимально допустимая погрешность для столбцов Conversion в числовом выражении (проценты поделить на 100)
+    accuracyConversion: 0.001,
+
+    parsedResult: {},
+
+    // column numbers of specified data. Number starts from zero
+    searchTermColumn: 1,
+    searchFrequencyRankColumn: 2,
+    asinsColumns: [3, 7, 11],
+    productsDescriptionColumns: [4, 8, 12],
+    clickColumns: [5, 9, 13],
+    conversionColumns: [6, 10, 14],
+    // end of column numbers
+
+    // Type of specified data in columns
+    columnTypes: {
+        searchTerm: "string",
+        quantity: 'int',
+        searchFrequencyRank: "int",
+        asin: "string",
+        productDescription: "string",
+        click: "float",
+        conversion: "float",
+        link: "string",
+    },
+
+    searchTerm: '', // search term that user selected
+    searchTermIndex: 0, // search term row index
+    sortColumnNumber: 2,
+    isSortAscending: true,
+    error: false,
+    errorMsg: '',
+
+    /**
+     * asins in selected row by "Search Term"
+     * @type {Array.<string>}
+     */
+    selectedAsins: [],
+
+    /**
+     * Asins counters
+     * @type {Array.<number>}
+     */
+    selectedAsinsCounters: [],
+
+    /**
+     * array contains asins and quantity
+     * from frequency which contains any of selectedAsins
+     * @type {Array.<string, number>}
+     */
+    competitors: [],
+
+    frequency: [],
+
+    quantitativeValues: [],
+    quantitativeClicksOther: [],
+    quantitativeConversionsOther: [],
+    quantitativeAccuracyClick: [],
+    quantitativeCapacityClick: [],
+    quantitativeAccuracyConversion: [],
+    quantitativeCapacityConversion: [],
+
+    // define column headers in full table
+    fullTableHeaders: [
+        "Department",
+        "Search Term",
+        "Rank",
+        "1 ASIN",
+        "1 Product Title",
+        "1 clck",
+        "1 conv",
+        "2 ASIN",
+        "2 Product Title",
+        "2 clck",
+        "2 conv",
+        "3 ASIN",
+        "3 Product Title",
+        "3 clck",
+        "3 conv"
+    ],
+
+    // define column headers in competitors table
+    competitorsTableHeaders: [
+        "ASIN",
+        "К-во",
+        "Link",
+    ],
+
+    setParsedResult: result => {
+        // delete unneeded first and second row
+        result.data.shift();
+        result.data.shift();
+
+        // delete empty last row if exists
+        if (result.data[result.data.length-1].length === 1) {
+            result.data.pop();
+        }
+
+        analyse.parsedResult = result;
+    },
+};
+
+
+function parseFile() {
+    let fileInput = document.body.querySelector('#fileInput');
+
+    if ( ! fileInput.files.length) {
+        alert("Надо выбрать файл");
+        return false;
+    }
+
+    Papa.parse(fileInput.files[0], {
+        delimiter: "",	// auto-detect
+        newline: "",	// auto-detect
+        quoteChar: '"',
+        escapeChar: '"',
+        header: false,
+        transformHeader: undefined,
+        dynamicTyping: true,
+        preview: 0,
+        encoding: "",
+        worker: true,
+        comments: false,
+        step: undefined,
+        error: undefined,
+        download: false,
+        downloadRequestHeaders: undefined,
+        skipEmptyLines: false,
+        chunk: undefined,
+        fastMode: undefined,
+        beforeFirstChunk: undefined,
+        withCredentials: undefined,
+        transform: undefined,
+        delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP],
+        complete: result => {
+            console.log("parsing complete");
+            if (validateParsingResult(result)) {
+                analyse.setParsedResult(result);
+                analyse.frequency = analyse.parsedResult.data;
+
+                document.getElementById('competitorsHeader').innerHTML = '';
+                document.getElementById('competitors').innerHTML = '';
+                document.getElementById('frequencyHeader').innerHTML = '';
+                document.getElementById('frequency').innerHTML = '';
+                document.getElementById('quantitativeValuesHeader').innerHTML = '';
+                document.getElementById('quantitativeValues').innerHTML = '';
+
+                analyse.selectedAsins = [];
+                analyse.competitors = [];
+                analyse.selectedAsinsCounters = [];
+                analyse.searchTerm = '';
+                analyse.searchTermIndex = 0;
+                analyse.quantitativeValues = [];
+                analyse.quantitativeClicksOther = [];
+                analyse.quantitativeConversionsOther = [];
+                analyse.quantitativeAccuracyClick = [];
+                analyse.quantitativeCapacityClick = [];
+                analyse.quantitativeAccuracyConversion = [];
+                analyse.quantitativeCapacityConversion = [];
+
+                renderTable(
+                    'frequency',
+                    analyse.frequency,
+                    2,// analyse.searchFrequencyRankColumn,
+                    true);
+            }
+            console.log("render complete");
+        },
+    });
+}
+
+/**
+ * Renders table into parent element
+ * Gets content from parsed file as array "dataArray"
+ * @param {string} parentElementId id of parent HTMLElement into which the table will be inserted
+ * @param {Array} dataArray two-dimension array for table content without column headers
+ * @param {number} columnNumberToSort column number (started from zero) to sort
+ * @param {boolean} isSortAscending true if sorting data should be ascending, false - descending
+ * @param {boolean} isFullTable true if table show 14 columns, false - competitors table, default: true
+ * @param {number} [lastRow] number of last row (limit rows number to lastRow), default: lastRow = 0 (no limit)
+ */
+function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscending = true, isFullTable = true, lastRow = 0) {
+    let html = '';
+    let value = '';
+    let columnName = (isFullTable ? getFullTableColumnName(columnNumberToSort) : getCompetitorsTableColumnName(columnNumberToSort));
+
+    let parentHTMLElement = document.getElementById(parentElementId);
+
+    if (isFullTable) {
+        analyse.sortColumnNumber = columnNumberToSort;
+        analyse.isSortAscending = isSortAscending;
+    }
+
+    if (lastRow === 0 || lastRow >= dataArray.length) {
+        lastRow = dataArray.length - 1;
+    }
+
+    sortArray(
+        dataArray,
+        (columnName.value === 'link' ? columnNumberToSort - 2 : columnNumberToSort),
+        analyse.columnTypes[columnName.value],
+        isSortAscending,
+    );
+
+    html += `<input type="button" class="clipboard" value="копировать таблицу" data-clipboard-target="#${parentElementId}Table" onclick="clearSelection();">`;
+    if(parentElementId === 'quantitativeValues'){
+        html += `
+		<table id="quantitativeSetup" class="quantitativeSetup">
+			<tr>
+        		<td>разрядность для мин. значения click</td>
+        		<td><div>
+        			<label>${analyse.capacityClick}</label><br />
+        			<input type='range' value="${analyse.capacityClick}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+        		</td>
+        		<td>макс.допустимая погрешность в % для click</td>
+        		<td><div>
+        			<input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
+        			<input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+        		</td>
+        		<td>разрядность для мин. значения conversion</td>
+        		<td><div>
+        			<label>${analyse.capacityConversion}</label><br />
+        			<input type='range' value="${analyse.capacityConversion}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+        		</td>
+        		<td>макс.допустимая погрешность в % для conversion</td>
+        		<td><div>
+        			<input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
+        			<input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+        		</td>
+    		</tr>
+		</table>`;
+    }
+    html += `<table id='${parentElementId}Table' class=${isFullTable ? 'fullTable' : 'competitorsTable'}>`;
+
+    for(let i = 0; i <= lastRow; i++) {
+
+        // create column headers
+        if (i === 0) {
+            html += "<tr data-sorted='true'>";
+
+            for (
+                let j = (isFullTable ? 1 : 0); // starting from "j = 1" because first column is not needed in FullTable
+                j < (isFullTable ? analyse.fullTableHeaders.length : analyse.competitorsTableHeaders.length);
+                j++
+            ) {
+                html += `
+                    <th data-sorted-direction=${
+                    // Is this column need to be sorted?
+                    j === columnNumberToSort
+                        ? (isSortAscending ? "ascending" : "descending") // how this column need to be sorted?
+                        : ''}><input type="text" onkeypress="filter('${parentElementId}', ${j}, this, event)"><br />${
+                    (isFullTable ? analyse.fullTableHeaders[j] : analyse.competitorsTableHeaders[j])
+                    }</th>`;
+            }
+            html += "</tr>";
+        }
+
+        if (isFullTable) {
+            html += "<tr data-visible='true'>";
+
+            // starting from "j = 1" because first column is not needed
+            for (let j = 1; j < dataArray[0].length; j++) {
+
+                // detect column type
+                columnName = getFullTableColumnName(j);
+
+                // define class for element
+                let elementClass = '';
+                // if (columnName.isSearchFrequencyRank) elementClass = " class='rank' ";
+                // if (columnName.isAsin) elementClass = " class='asin' ";
+                // if (columnName.isClick || columnName.isConversion) elementClass = " class='clck' ";
+
+                value = (dataArray[i][j] === null ? '' : dataArray[i][j]);
+
+                if(columnName.isClick && parentElementId === 'quantitativeValues') {
+                    html += `<td title='${
+                        dataArray[i][5]} : ${dataArray[i][9]} : ${dataArray[i][13]} : ${analyse.quantitativeClicksOther[i]}\n${
+                        (analyse.quantitativeAccuracyClick[i] * 100).toFixed(3)}% - полученная погрешность, ограничена:\n${
+                        (analyse.accuracyClick * 100).toFixed(3)}% - допустимой погрешностью, или\n${
+                        analyse.capacityClick} - разрядностью минимального числа'>`;
+                } else if(columnName.isConversion && parentElementId === 'quantitativeValues') {
+                    html += `<td title='${
+                        dataArray[i][6]} : ${dataArray[i][10]} : ${dataArray[i][14]} : ${analyse.quantitativeConversionsOther[i]}\n${
+                        (analyse.quantitativeAccuracyConversion[i] * 100).toFixed(3)}% - полученная погрешность,ограничена:\n${
+                        (analyse.accuracyConversion * 100).toFixed(3)}% - допустимой погрешностью, или\n${
+                        analyse.capacityClick} - разрядностью минимального числа'>`;
+                } else html += "<td>";
+                if (columnName.isProductDescription) html += `<span class='productDescription' title='${value}'>`;
+                if (columnName.isSearchTerm) html += `<span class='searchTerm' title='${value}'>`;
+                html += value;
+                if (columnName.isProductDescription || columnName.isSearchTerm) html += "</span>";
+                html += '</td>';
+            }
+            html += "</tr>";
+        }
+    }
+
+    if (parentElementId ==='competitors') {
+        for (let i = 0; i < analyse.competitors.length; i++) {
+            html += `<tr>
+                <td>${dataArray[i][0]}</td>
+                <td>${dataArray[i][1]}</td>
+                <td>
+                    <a href="https://www.amazon.com/s?k=${dataArray[i][0]}&ref=nb_sb_noss" target="_blank">
+                        ${dataArray[i][0]}
+                    </a>
+                </td>
+            </tr>`;
+        }
+    }
+
+    html += "</table>";
+
+    parentHTMLElement.innerHTML = html;
+}
+
+/**
+ * Returns true if parsing result passed validation
+ * @param result
+ * @returns {boolean}
+ */
+function validateParsingResult(result) {
+    let errorMessage = '';
+    let columnHeaders = ["Department","Search Term","Search Frequency Rank","#1 Clicked ASIN","#1 Product Title","#1 Click Share","#1 Conversion Share","#2 Clicked ASIN","#2 Product Title","#2 Click Share","#2 Conversion Share","#3 Clicked ASIN","#3 Product Title","#3 Click Share","#3 Conversion Share"];
+
+    if (result.data.length < 3) {
+        errorMessage = "ожидалось минимум 3 строки:\n1 - служебная\n2 - заголовки столбцов\n3 - строка данных";
+    } else if (result.data[1].length !== 15) {
+        errorMessage = "ожидалось 15 столбцов";
+    } else if (columnHeaders.toString() !== result.data[1].toString()) {
+        errorMessage = "\nво второй строке ожидались\nследующие заголовки столбцов: \n" + columnHeaders.join('\n');
+    }
+
+    if (errorMessage) {
+        analyse.error = true;
+        analyse.errorMsg = "Ошибка импорта данных из файла: " + errorMessage;
+        alert(analyse.errorMsg);
+        return false;
+    } else return true;
+}
+
+/**
+ * Clears selection from any HTMLElements (they bekame selected after copying them to buffer)
+ */
+function clearSelection() {
+    let intervalId = setInterval(()=>window.getSelection().removeAllRanges(),900);
+    setTimeout(()=>clearInterval(intervalId) ,3000);
+}
+
+function tableClick(event) {
+    if (event.target.closest('td') && (event.target.closest('table').id === "frequencyTable" || event.target.closest('table').id === "quantitativeValuesTable")) {
+        // scroll to top of page
+        setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 500);
+
+        // reset data for pushing new values later
+        analyse.selectedAsins = [];
+        analyse.competitors = [];
+        analyse.selectedAsinsCounters = [];
+        analyse.searchTerm = '';
+        analyse.searchTermIndex = 0;
+        analyse.quantitativeValues = [];
+        analyse.quantitativeClicksOther = [];
+        analyse.quantitativeConversionsOther = [];
+        analyse.quantitativeAccuracyClick = [];
+        analyse.quantitativeCapacityClick = [];
+        analyse.quantitativeAccuracyConversion = [];
+        analyse.quantitativeCapacityConversion = [];
+
+        analyse.searchTerm = event.target.closest('tr').firstChild.firstChild.innerHTML;
+        analyse.searchTermIndex = analyse.parsedResult.data.findIndex(row => row.indexOf(analyse.searchTerm) !== -1);
+
+        let html = ''; // html buffer
+        let filteredResult = new Set(); // to avoid duplicates
+        let filteredAsins = [];
+
+        // link to selected row in two-dimensional parsed array associated with clicked table row
+        const selectedDataRow = analyse.parsedResult.data[analyse.searchTermIndex];
+
+        // fill analyse.selectedAsins array
+        for (let i = 0; i < analyse.asinsColumns.length; i++) {
+            let asin = selectedDataRow[analyse.asinsColumns[i]];
+            if (asin !== null) {
+                analyse.selectedAsins.push(asin);
+                analyse.selectedAsinsCounters.push(0);
+            }
+        }
+
+        // fill filteredResult
+        for(let i = 0; i < analyse.parsedResult.data.length; i++) {
+            const row = analyse.parsedResult.data[i];
+            for(let j = 0; j < analyse.selectedAsins.length; j++) {
+                if (row.includes(analyse.selectedAsins[j])) {
+                    filteredResult.add(row); // avoid duplicates
+                }
+            }
+        }
+
+        // get all asins from filteredResult and push them to filteredAsins
+        filteredResult.forEach(row => {
+            for (let i = 0; i < analyse.asinsColumns.length; i++) {
+                let asin = row[analyse.asinsColumns[i]];
+                if (asin) filteredAsins.push(asin);
+            }
+
+        });
+
+        // insert de-duplicated asins and their counters to analyse.competitors
+        let asins = {};
+        filteredAsins.forEach(asin => asins[asin] ? asins[asin]++ : asins[asin] = 1);
+        analyse.competitors = Object.entries(asins);
+
+        analyse.frequency = [...filteredResult];
+
+        for(let i = 0; i < analyse.frequency.length; i++) {
+            analyse.quantitativeValues.push([Array(analyse.frequency.length)]);
+        }
+
+        for(let i = 0; i < analyse.frequency.length; i++) {
+            for(let j = 0; j < analyse.frequency[i].length; j++) {
+                if (j === 5 || j === 6) {
+                    [
+                        analyse.quantitativeValues[i][5],
+                        analyse.quantitativeValues[i][9],
+                        analyse.quantitativeValues[i][13],
+                        analyse.quantitativeClicksOther[i],
+                        analyse.quantitativeAccuracyClick[i],
+                        analyse.quantitativeCapacityClick[i]
+                    ] = getQuantitativeValues(
+                        analyse.frequency[i][5],
+                        analyse.frequency[i][9],
+                        analyse.frequency[i][13],
+                        analyse.capacityClick,
+                        analyse.accuracyClick);
+                    [
+                        analyse.quantitativeValues[i][6],
+                        analyse.quantitativeValues[i][10],
+                        analyse.quantitativeValues[i][14],
+                        analyse.quantitativeConversionsOther[i],
+                        analyse.quantitativeAccuracyConversion[i],
+                        analyse.quantitativeCapacityConversion[i],
+                    ] = getQuantitativeValues(
+                        analyse.frequency[i][6],
+                        analyse.frequency[i][10],
+                        analyse.frequency[i][14],
+                        analyse.capacityConversion,
+                        analyse.accuracyConversion);
+                } else if ( ! (j === 9 || j === 10 || j === 13 || j === 14)) {
+                    analyse.quantitativeValues[i][j] = analyse.frequency[i][j];
+                }
+            }
+        }
+
+        // fill result for stage 1 from html buffer
+        html = `<h3>1. Конкуренты ASINs '${analyse.selectedAsins.join("', '")}' по поисковой фразе: "${analyse.searchTerm}"
+                    <input type="button" onclick="clearFilter()" value="сбросить фильтр">
+                </h3>`;
+        document.getElementById('competitorsHeader').innerHTML = html;
+
+        html = `<h3>2. Фильтр частотности для ASINs '${analyse.selectedAsins.join("', '")}', поисковая фраза: "${analyse.searchTerm}"  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>`;
+        document.getElementById('frequencyHeader').innerHTML = html;
+
+        html = `<h3>3. Количественные значения click, conversion  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>`;
+        document.getElementById('quantitativeValuesHeader').innerHTML = html;
+
+        renderTable(
+            'competitors',
+            analyse.competitors,
+            analyse.competitorsTableHeaders.indexOf('К-во') !== -1 ? analyse.competitorsTableHeaders.indexOf('К-во') : 0,
+            false,
+            false);
+
+        renderTable(
+            'frequency',
+            analyse.frequency,
+            analyse.sortColumnNumber,
+            analyse.isSortAscending);
+
+        renderTable(
+            'quantitativeValues',
+            analyse.quantitativeValues,
+            analyse.sortColumnNumber,
+            analyse.isSortAscending);
+    } else if (event.target.closest('th') && event.target.tagName !== 'INPUT') {
+        let clickedElement = event.target.closest('th');
+        let sortedDirection = clickedElement.dataset.sortedDirection;
+        let parentElementId = event.target.closest('div').id;
+        let isFullTable = (event.target.closest('div').id !== 'competitors');
+
+        // sets ascending sort or inverts direction if exists
+        if (sortedDirection !== '') analyse.isSortAscending = (sortedDirection !== "ascending"); else analyse.isSortAscending = true;
+
+        event.target.closest('tr').querySelectorAll('data-sorted-direction')
+        .forEach(element => element.dataset.sortedDirection = '');
+
+        clickedElement.dataset.sortedDirection = (analyse.isSortAscending ? "ascending" : "descending");
+
+        renderTable(
+            parentElementId,
+            analyse[event.target.closest('div').id],
+            event.target.closest('th').cellIndex + (isFullTable ? 1 : 0), // +1 is needed because first column from array is skipped in table
+            analyse.isSortAscending,
+            isFullTable,
+        );
+    }
+}
+
+/**
+ * Unhide all rows in table (remove from all rows class '.hide')
+ * @param tableId
+ */
+function unhideTableRows(tableId) {
+    document.getElementById(tableId).querySelectorAll('tr[data-visible="false"]').forEach(element=>element.dataset.visible = 'true');
+}
+
+function sortStringArray(dataArray, arrayIndex, isAscending) {
+    dataArray.sort((a,b) => {
+        a = a[arrayIndex];
+        b = b[arrayIndex];
+        a = (a === null ? a = '' : String(a));
+        b = (b === null ? b = '' : String(b));
+        return isAscending ? a.localeCompare(b) : b.localeCompare(a);
+    });
+}
+
+function sortIntArray(dataArray, arrayIndex, isAscending) {
+    dataArray.sort((a,b) => {
+        a = parseInt(String(a[arrayIndex]).replace(/,/g,''));
+        b = parseInt(String(b[arrayIndex]).replace(/,/g,''));
+        if (isNaN(a)) a = 101;
+        if (isNaN(b)) b = 101;
+        return isAscending ? a - b : b - a;
+    });
+}
+
+function sortFloatArray(dataArray, arrayIndex, isAscending) {
+    dataArray.sort((a,b) => {
+        a = parseFloat(a[arrayIndex]);
+        b = parseFloat(b[arrayIndex]);
+        if (isNaN(a)) a = 101;
+        if (isNaN(b)) b = 101;
+        return isAscending ? a - b : b - a;
+    });
+}
+
+function sortArray(dataArray, columnNumberToSort, columnDataType, isSortAscending) {
+    switch (columnDataType) {
+        case "string":
+            sortStringArray(dataArray, columnNumberToSort, isSortAscending);
+            break;
+
+        case "int":
+            sortIntArray(dataArray, columnNumberToSort, isSortAscending);
+            break;
+
+        case "float":
+            sortFloatArray(dataArray, columnNumberToSort, isSortAscending);
+            break;
+    }
+}
+
+function getFullTableColumnName(columnNumber) {
+    let columnName =  {
+        isSearchTerm: (columnNumber === analyse.searchTermColumn),
+        isSearchFrequencyRank: (columnNumber === analyse.searchFrequencyRankColumn),
+        isAsin: analyse.asinsColumns.includes(columnNumber),
+        isProductDescription: analyse.productsDescriptionColumns.includes(columnNumber),
+        isClick: analyse.clickColumns.includes(columnNumber),
+        isConversion: analyse.conversionColumns.includes(columnNumber)
+    };
+
+    // columnName.value - a string with the name of the property that has a true value (it may be the only one)
+    // columnName.value is obtained from such property name conversion as "isSearchFrequencyRank" => "searchFrequencyRank"
+    // it is in camelCase without "is": searchTerm, searchFrequencyRank, asin, productDescription, click, conversion
+    columnName.value = Object.keys(columnName).filter(
+        value => columnName[value])[0].substr(2).replace(/^\w/, c => c.toLowerCase()
+    );
+
+    return columnName;
+}
+
+function getCompetitorsTableColumnName(columnNumber) {
+    let columnName =  {
+        isAsin: (columnNumber === 0),
+        isQuantity: (columnNumber === 1),
+        isLink: (columnNumber === 2),
+    };
+
+    // columnName.value - a string with the name of the property that has a true value (it may be the only one)
+    // columnName.value is obtained from such property name conversion as "isSearchFrequencyRank" => "searchFrequencyRank"
+    // it is in camelCase without "is": searchFrequencyRank, quantity, asin
+    columnName.value = Object.keys(columnName).filter(
+        value => columnName[value])[0].substr(2).replace(/^\w/, c => c.toLowerCase()
+    );
+
+    return columnName;
+}
+
+function clearFilter() {
+    document.getElementById('competitorsHeader').innerHTML = '';
+    document.getElementById('competitors').innerHTML = '';
+    document.getElementById('frequencyHeader').innerHTML = '';
+    document.getElementById('frequency').innerHTML = '';
+    document.getElementById('quantitativeValuesHeader').innerHTML = '';
+    document.getElementById('quantitativeValues').innerHTML = '';
+
+    analyse.selectedAsins = [];
+    analyse.competitors = [];
+    analyse.selectedAsinsCounters = [];
+    analyse.searchTerm = '';
+    analyse.searchTermIndex = 0;
+    analyse.quantitativeValues = [];
+    analyse.quantitativeClicksOther = [];
+    analyse.quantitativeConversionsOther = [];
+    analyse.quantitativeAccuracyClick = [];
+    analyse.quantitativeCapacityClick = [];
+    analyse.quantitativeAccuracyConversion = [];
+    analyse.quantitativeCapacityConversion = [];
+
+    analyse.frequency = analyse.parsedResult.data;
+
+    renderTable(
+        'frequency',
+        analyse.parsedResult.data,
+        analyse.sortColumnNumber,
+        analyse.isSortAscending);
+
+    // scroll to top of page
+    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 500);
+}
+
+function filter(tableParentId, columnNumber, inputElement, event) {
+    if (!event) event = window.event;
+    let keyCode = event.keyCode || event.which;
+    if (keyCode !== 13) return;
+    let table = document.getElementById(tableParentId + "Table");
+
+    // hide all rows that do not match the filter
+    for(let i = 0; i < analyse[tableParentId].length; i++) {
+        if(String(analyse[tableParentId][i][columnNumber]).toLowerCase().includes(String(inputElement.value).toLowerCase())) {
+            // i+1 because array does not have columns headers but table does
+            table.rows[i+1].dataset.visible = "true";
+        } else {
+            // i+1 because array does not have columns headers but table does
+            table.rows[i+1].dataset.visible = "false";
+        }
+    }
+
+    // columnNumber-- because array does not have columns headers but table does
+    if (tableParentId !== 'competitors') columnNumber--;
+
+    // clear previous filter in other cell
+    Array.from(table.rows[0].cells).forEach(cell => {
+        if (cell.cellIndex !== columnNumber) {
+            cell.querySelector('input').value = '';
+        }
+    });
+}
+
+function getQuantitativeValues(a, b, c, capacity, accuracy) {
+    let values = [];
+    a = parseFloat(a);
+    b = parseFloat(b);
+    c = parseFloat(c);
+    values.push(isNaN(a) ? 0 : Math.round(a * 100));
+    values.push(isNaN(b) ? 0 : Math.round(b * 100));
+    values.push(isNaN(c) ? 0 : Math.round(c * 100));
+    values.push(10000 - values[0] - values[1] - values[2]);
+
+    let minValue = Math.min(...values);
+    if(minValue === 0) {
+        values.some(value => { if(value) minValue = value; });
+        if(minValue === 0) return [0,0,0,0,0];
+
+        values.forEach(value => {
+            if (value !== 0 && value < minValue) minValue = value;
+        });
+    }
+
+    let newValues = [];
+    let newAccuracy = 1;
+    let currentAccuracy = 1;
+    let multiplier = 1;
+    let maxMultiplier = 10000 * Math.pow(10, capacity - 4);
+    let accuracyValues = [];
+    let relativeValues = []; // array of values/minValue
+    let info = ''; // info buffer
+
+    // calculate values relative to variable with minimal value
+    for(let i = 0; i < 4; i++) {
+        relativeValues[i] = values[i]/minValue;
+    }
+
+    // find optimal values ​​corresponding to the given capacity and accuracy
+    for(let i = 1; i < maxMultiplier; i++) {
+        for(let j = 0; j < 4; j++) {
+            newValues[j] = relativeValues[j] * i;
+            accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j])/newValues[j]) : 0);
+        }
+        newAccuracy = Math.max(...accuracyValues);
+        if (newAccuracy < currentAccuracy) {
+            currentAccuracy = newAccuracy;
+            multiplier = i;
+            if (newAccuracy < accuracy) break;
+        }
+    }
+
+    // get values ​​for the found optimal multiplier
+    for(let j = 0; j < 4; j++) {
+        newValues[j] = relativeValues[j] * multiplier;
+        accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j])/newValues[j]) : 0);
+        newValues[j] = Math.round(newValues[j]);
+    }
+
+    return [
+        newValues[0],
+        newValues[1],
+        newValues[2],
+        newValues[3],
+        currentAccuracy,
+        capacity
+    ];
+}
+
+function changeQuantitativeValues(columnType, valueType, input, columnNumberToSort, isSortAscending) {
+    let value = input.value;
+    if(columnType === 'click') {
+        if(valueType === 'capacity') {
+            value = parseInt(value);
+            if (isNaN(value)){
+                value = 4;
+            } else if (value < 1) {
+                value = 1;
+            } else if (value > 4) {
+                value = 4;
+            }
+            input.value = value;
+            input.previousElementSibling.previousSibling.innerText = value;
+            analyse.capacityClick = value;
+        } else {
+            value = parseFloat(value);
+            if (isNaN(value) || value < 0){
+                value = 0;
+            } else if (value > 100) {
+                value = 100;
+            }
+            input.value = value.toFixed(3);
+            input.type === 'range'
+                ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
+                : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
+            analyse.accuracyClick = value/100;
+        }
+    } else {
+        if(valueType === 'capacity') {
+            if (isNaN(value)){
+                value = 4;
+            } else if (value < 1) {
+                value = 1;
+            } else if (value > 4) {
+                value = 4;
+            }
+            input.value = value;
+            input.previousElementSibling.previousSibling.innerText = value;
+            analyse.capacityConversion = value;
+        } else {
+            value = parseFloat(value);
+            if (isNaN(value) || value < 0){
+                value = 0;
+            } else if (value > 100) {
+                value = 100;
+            }
+            input.value = value.toFixed(3);
+            input.type === 'range'
+                ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
+                : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
+            analyse.accuracyConversion = value/100;
+        }
+    }
+
+    for(let i = 0; i < analyse.frequency.length; i++) {
+        [
+            analyse.quantitativeValues[i][5],
+            analyse.quantitativeValues[i][9],
+            analyse.quantitativeValues[i][13],
+            analyse.quantitativeClicksOther[i],
+            analyse.quantitativeAccuracyClick[i],
+            analyse.quantitativeCapacityClick[i]
+        ] = getQuantitativeValues(
+            analyse.frequency[i][5],
+            analyse.frequency[i][9],
+            analyse.frequency[i][13],
+            analyse.capacityClick,
+            analyse.accuracyClick);
+        [
+            analyse.quantitativeValues[i][6],
+            analyse.quantitativeValues[i][10],
+            analyse.quantitativeValues[i][14],
+            analyse.quantitativeConversionsOther[i],
+            analyse.quantitativeAccuracyConversion[i],
+            analyse.quantitativeCapacityConversion[i],
+        ] = getQuantitativeValues(
+            analyse.frequency[i][6],
+            analyse.frequency[i][10],
+            analyse.frequency[i][14],
+            analyse.capacityConversion,
+            analyse.accuracyConversion);
+    }
+
+    for(let i = 0; i < analyse.quantitativeValues.length; i++) {
+        let row = document.getElementById('quantitativeValuesTable').rows[i + 1]; // .rows[i + 1] to skip column headers in table
+        let titleClick = createQuantitativeTitle(i, 'Click');
+        let titleConversion = createQuantitativeTitle(i, 'Conversion');
+
+        for(let j = 0; j < analyse.clickColumns.length; j++) {
+            let cellClick = row.cells[analyse.clickColumns[j] - 1]; // - 1 because table does not have first column that data array does
+            let cellConversion = row.cells[analyse.conversionColumns[j] - 1]; // - 1 because table does not have first column that data array does
+
+            cellClick.innerText = analyse.quantitativeValues[i][analyse.clickColumns[j]];
+            cellConversion.innerText = analyse.quantitativeValues[i][analyse.conversionColumns[j]];
+
+            cellClick.title = titleClick;
+            cellConversion.title = titleConversion;
+        }
+    }
+}
+
+function createQuantitativeTitle(rowIndex, columnType) {
+    if(isNaN(rowIndex) || rowIndex < 0)
+        throw Error('rowIndex must be a number >= 0');
+    if(columnType !== 'Click' && columnType !== 'Conversion')
+        throw Error('createQuantitativeTitle: columnType must be string "Click" or "Conversion"');
+
+    let isClick = (columnType === 'Click');
+
+    return `${
+        analyse.quantitativeValues[rowIndex][isClick ? 5 : 6]} : ${analyse.quantitativeValues[rowIndex][isClick ? 9 : 10]} : ${analyse.quantitativeValues[rowIndex][isClick ? 13 : 14]} : ${analyse[isClick ? 'quantitativeClicksOther' : 'quantitativeConversionsOther'][rowIndex]}\n${
+        (analyse[isClick ? 'quantitativeAccuracyClick' : 'quantitativeAccuracyConversion'][rowIndex] * 100).toFixed(3)}% - полученная погрешность, ограничена:\n${
+        (analyse[isClick ? 'accuracyClick' : 'accuracyConversion'] * 100).toFixed(3)}% - допустимой погрешностью, или\n${
+        analyse[isClick ? 'capacityClick' : 'capacityConversion']} - разрядностью минимального числа`;
+}
+
+new ClipboardJS('.clipboard'); // handle clicks on elements with ".clipboard" class for copy data to clipboard
+document.body.querySelector('#fileInput').value = ''; // clear filename if exists
+document.body.addEventListener('click', tableClick);
+</script>
+</html>
