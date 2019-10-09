@@ -1,4 +1,5 @@
-let analyse = {
+/* eslint-disable no-use-before-define,no-restricted-globals */
+const analyse = {
     // размерность для столбцов Click (количество цифр)
     capacityClick: 4,
 
@@ -24,14 +25,14 @@ let analyse = {
 
     // Type of specified data in columns
     columnTypes: {
-        searchTerm: "string",
+        searchTerm: 'string',
         quantity: 'int',
-        searchFrequencyRank: "int",
-        asin: "string",
-        productDescription: "string",
-        click: "float",
-        conversion: "float",
-        link: "string",
+        searchFrequencyRank: 'int',
+        asin: 'string',
+        productDescription: 'string',
+        click: 'float',
+        conversion: 'float',
+        link: 'string',
     },
 
     searchTerm: '', // search term that user selected
@@ -72,28 +73,28 @@ let analyse = {
 
     // define column headers in full table
     fullTableHeaders: [
-        "Department",
-        "Search Term",
-        "Rank",
-        "1 ASIN",
-        "1 Product Title",
-        "1 clck",
-        "1 conv",
-        "2 ASIN",
-        "2 Product Title",
-        "2 clck",
-        "2 conv",
-        "3 ASIN",
-        "3 Product Title",
-        "3 clck",
-        "3 conv"
+        'Department',
+        'Search Term',
+        'Rank',
+        '1 ASIN',
+        '1 Product Title',
+        '1 clck',
+        '1 conv',
+        '2 ASIN',
+        '2 Product Title',
+        '2 clck',
+        '2 conv',
+        '3 ASIN',
+        '3 Product Title',
+        '3 clck',
+        '3 conv',
     ],
 
     // define column headers in competitors table
     competitorsTableHeaders: [
-        "ASIN",
-        "К-во",
-        "Link",
+        'ASIN',
+        'К-во',
+        'Link',
     ],
 
     setParsedResult: result => {
@@ -102,7 +103,7 @@ let analyse = {
         result.data.shift();
 
         // delete empty last row if exists
-        if (result.data[result.data.length-1].length === 1) {
+        if (result.data[result.data.length - 1].length === 1) {
             result.data.pop();
         }
 
@@ -110,25 +111,27 @@ let analyse = {
     },
 };
 
-
+// eslint-disable-next-line consistent-return,no-unused-vars
 function parseFile() {
-    let fileInput = document.body.querySelector('#fileInput');
+    const fileInput = document.body.querySelector('#fileInput');
 
-    if ( ! fileInput.files.length) {
-        alert("Надо выбрать файл");
+    if (!fileInput.files.length) {
+        // eslint-disable-next-line no-alert
+        alert('Надо выбрать файл');
         return false;
     }
 
+    // eslint-disable-next-line no-undef
     Papa.parse(fileInput.files[0], {
-        delimiter: "",	// auto-detect
-        newline: "",	// auto-detect
+        delimiter: '', // auto-detect
+        newline: '', // auto-detect
         quoteChar: '"',
         escapeChar: '"',
         header: false,
         transformHeader: undefined,
         dynamicTyping: true,
         preview: 0,
-        encoding: "",
+        encoding: '',
         worker: true,
         comments: false,
         step: undefined,
@@ -141,9 +144,9 @@ function parseFile() {
         beforeFirstChunk: undefined,
         withCredentials: undefined,
         transform: undefined,
+        // eslint-disable-next-line no-undef
         delimitersToGuess: [',', '\t', '|', ';', Papa.RECORD_SEP, Papa.UNIT_SEP],
         complete: result => {
-            console.log("parsing complete");
             if (validateParsingResult(result)) {
                 analyse.setParsedResult(result);
                 analyse.frequency = analyse.parsedResult.data;
@@ -171,10 +174,10 @@ function parseFile() {
                 renderTable(
                     'frequency',
                     analyse.frequency,
-                    2,// analyse.searchFrequencyRankColumn,
-                    true);
+                    2, // analyse.searchFrequencyRankColumn,
+                    true,
+                );
             }
-            console.log("render complete");
         },
     });
 }
@@ -192,9 +195,12 @@ function parseFile() {
 function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscending = true, isFullTable = true, lastRow = 0) {
     let html = '';
     let value = '';
-    let columnName = (isFullTable ? getFullTableColumnName(columnNumberToSort) : getCompetitorsTableColumnName(columnNumberToSort));
+    let columnName = (
+        isFullTable
+            ? getFullTableColumnName(columnNumberToSort)
+            : getCompetitorsTableColumnName(columnNumberToSort));
 
-    let parentHTMLElement = document.getElementById(parentElementId);
+    const parentHTMLElement = document.getElementById(parentElementId);
 
     if (isFullTable) {
         analyse.sortColumnNumber = columnNumberToSort;
@@ -213,37 +219,36 @@ function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscen
     );
 
     html += `<input type="button" class="clipboard" value="копировать таблицу" data-clipboard-target="#${parentElementId}Table" onclick="clearSelection();">`;
-    if(parentElementId === 'quantitativeValues'){
+    if (parentElementId === 'quantitativeValues') {
         html += `
-		<table id="quantitativeSetup" class="quantitativeSetup">
-			<tr>
-        		<td>разрядность для мин. значения click</td>
-        		<td><div>
-        			<label>${analyse.capacityClick}</label><br />
-        			<input type='range' value="${analyse.capacityClick}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
-        		</td>
-        		<td>макс.допустимая погрешность в % для click</td>
-        		<td><div>
-        			<input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
-        			<input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
-        		</td>
-        		<td>разрядность для мин. значения conversion</td>
-        		<td><div>
-        			<label>${analyse.capacityConversion}</label><br />
-        			<input type='range' value="${analyse.capacityConversion}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
-        		</td>
-        		<td>макс.допустимая погрешность в % для conversion</td>
-        		<td><div>
-        			<input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
-        			<input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
-        		</td>
-    		</tr>
-		</table>`;
+        <table id="quantitativeSetup" class="quantitativeSetup">
+            <tr>
+                <td>разрядность для мин. значения click</td>
+                <td><div>
+                    <label>${analyse.capacityClick}</label><br />
+                    <input type='range' value="${analyse.capacityClick}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+                </td>
+                <td>макс.допустимая погрешность в % для click</td>
+                <td><div>
+                    <input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
+                    <input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('click', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+                </td>
+                <td>разрядность для мин. значения conversion</td>
+                <td><div>
+                    <label>${analyse.capacityConversion}</label><br />
+                    <input type='range' value="${analyse.capacityConversion}" min="1" max="4" step="1" size="1" onchange="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'capacity', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+                </td>
+                <td>макс.допустимая погрешность в % для conversion</td>
+                <td><div>
+                    <input type='number' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"><br />
+                    <input type='range' value="${analyse.accuracyClick * 100}" min="0" step="0.001" max="100"  size="5" onchange="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})" oninput="changeQuantitativeValues('conversion', 'accuracy', this, ${columnNumberToSort}, ${isSortAscending})"></div>
+                </td>
+            </tr>
+        </table>`;
     }
     html += `<table id='${parentElementId}Table' class=${isFullTable ? 'fullTable' : 'competitorsTable'}>`;
 
-    for(let i = 0; i <= lastRow; i++) {
-
+    for (let i = 0; i <= lastRow; i++) {
         // create column headers
         if (i === 0) {
             html += "<tr data-sorted='true'>";
@@ -255,14 +260,15 @@ function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscen
             ) {
                 html += `
                     <th data-sorted-direction=${
-                    // Is this column need to be sorted?
-                    j === columnNumberToSort
-                        ? (isSortAscending ? "ascending" : "descending") // how this column need to be sorted?
-                        : ''}><input type="text" onkeypress="filter('${parentElementId}', ${j}, this, event)"><br />${
-                    (isFullTable ? analyse.fullTableHeaders[j] : analyse.competitorsTableHeaders[j])
-                    }</th>`;
+    // Is this column need to be sorted?
+    // eslint-disable-next-line no-nested-ternary
+    j === columnNumberToSort
+        ? (isSortAscending ? 'ascending' : 'descending') // how this column need to be sorted?
+        : ''}><input type="text" onkeypress="filter('${parentElementId}', ${j}, this, event)"><br />${
+    (isFullTable ? analyse.fullTableHeaders[j] : analyse.competitorsTableHeaders[j])
+}</th>`;
             }
-            html += "</tr>";
+            html += '</tr>';
         }
 
         if (isFullTable) {
@@ -270,42 +276,35 @@ function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscen
 
             // starting from "j = 1" because first column is not needed
             for (let j = 1; j < dataArray[0].length; j++) {
-
                 // detect column type
                 columnName = getFullTableColumnName(j);
 
-                // define class for element
-                let elementClass = '';
-                // if (columnName.isSearchFrequencyRank) elementClass = " class='rank' ";
-                // if (columnName.isAsin) elementClass = " class='asin' ";
-                // if (columnName.isClick || columnName.isConversion) elementClass = " class='clck' ";
-
                 value = (dataArray[i][j] === null ? '' : dataArray[i][j]);
 
-                if(columnName.isClick && parentElementId === 'quantitativeValues') {
+                if (columnName.isClick && parentElementId === 'quantitativeValues') {
                     html += `<td title='${
                         dataArray[i][5]} : ${dataArray[i][9]} : ${dataArray[i][13]} : ${analyse.quantitativeClicksOther[i]}\n${
                         (analyse.quantitativeAccuracyClick[i] * 100).toFixed(3)}% - полученная погрешность, ограничена:\n${
                         (analyse.accuracyClick * 100).toFixed(3)}% - допустимой погрешностью, или\n${
                         analyse.capacityClick} - разрядностью минимального числа'>`;
-                } else if(columnName.isConversion && parentElementId === 'quantitativeValues') {
+                } else if (columnName.isConversion && parentElementId === 'quantitativeValues') {
                     html += `<td title='${
                         dataArray[i][6]} : ${dataArray[i][10]} : ${dataArray[i][14]} : ${analyse.quantitativeConversionsOther[i]}\n${
                         (analyse.quantitativeAccuracyConversion[i] * 100).toFixed(3)}% - полученная погрешность,ограничена:\n${
                         (analyse.accuracyConversion * 100).toFixed(3)}% - допустимой погрешностью, или\n${
                         analyse.capacityClick} - разрядностью минимального числа'>`;
-                } else html += "<td>";
+                } else html += '<td>';
                 if (columnName.isProductDescription) html += `<span class='productDescription' title='${value}'>`;
                 if (columnName.isSearchTerm) html += `<span class='searchTerm' title='${value}'>`;
                 html += value;
-                if (columnName.isProductDescription || columnName.isSearchTerm) html += "</span>";
+                if (columnName.isProductDescription || columnName.isSearchTerm) html += '</span>';
                 html += '</td>';
             }
-            html += "</tr>";
+            html += '</tr>';
         }
     }
 
-    if (parentElementId ==='competitors') {
+    if (parentElementId === 'competitors') {
         for (let i = 0; i < analyse.competitors.length; i++) {
             html += `<tr>
                 <td>${dataArray[i][0]}</td>
@@ -319,7 +318,7 @@ function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscen
         }
     }
 
-    html += "</table>";
+    html += '</table>';
 
     parentHTMLElement.innerHTML = html;
 }
@@ -331,36 +330,56 @@ function renderTable(parentElementId, dataArray, columnNumberToSort, isSortAscen
  */
 function validateParsingResult(result) {
     let errorMessage = '';
-    let columnHeaders = ["Department","Search Term","Search Frequency Rank","#1 Clicked ASIN","#1 Product Title","#1 Click Share","#1 Conversion Share","#2 Clicked ASIN","#2 Product Title","#2 Click Share","#2 Conversion Share","#3 Clicked ASIN","#3 Product Title","#3 Click Share","#3 Conversion Share"];
+    const columnHeaders = [
+        'Department',
+        'Search Term',
+        'Search Frequency Rank',
+        '#1 Clicked ASIN',
+        '#1 Product Title',
+        '#1 Click Share',
+        '#1 Conversion Share',
+        '#2 Clicked ASIN',
+        '#2 Product Title',
+        '#2 Click Share',
+        '#2 Conversion Share',
+        '#3 Clicked ASIN',
+        '#3 Product Title',
+        '#3 Click Share',
+        '#3 Conversion Share',
+    ];
 
     if (result.data.length < 3) {
-        errorMessage = "ожидалось минимум 3 строки:\n1 - служебная\n2 - заголовки столбцов\n3 - строка данных";
+        errorMessage = 'ожидалось минимум 3 строки:\n1 - служебная\n2 - заголовки столбцов\n3 - строка данных';
     } else if (result.data[1].length !== 15) {
-        errorMessage = "ожидалось 15 столбцов";
+        errorMessage = 'ожидалось 15 столбцов';
     } else if (columnHeaders.toString() !== result.data[1].toString()) {
-        errorMessage = "\nво второй строке ожидались\nследующие заголовки столбцов: \n" + columnHeaders.join('\n');
+        errorMessage = `\nво второй строке ожидались\nследующие заголовки столбцов: \n${columnHeaders.join('\n')}`;
     }
 
     if (errorMessage) {
         analyse.error = true;
-        analyse.errorMsg = "Ошибка импорта данных из файла: " + errorMessage;
+        analyse.errorMsg = `Ошибка импорта данных из файла: ${errorMessage}`;
+        // eslint-disable-next-line no-alert
         alert(analyse.errorMsg);
         return false;
-    } else return true;
+    } return true;
 }
 
 /**
  * Clears selection from any HTMLElements (they bekame selected after copying them to buffer)
  */
+// eslint-disable-next-line no-unused-vars
 function clearSelection() {
-    let intervalId = setInterval(()=>window.getSelection().removeAllRanges(),900);
-    setTimeout(()=>clearInterval(intervalId) ,3000);
+    const intervalId = setInterval(() => window.getSelection().removeAllRanges(), 900);
+    setTimeout(() => clearInterval(intervalId), 3000);
 }
 
 function tableClick(event) {
-    if (event.target.closest('td') && (event.target.closest('table').id === "frequencyTable" || event.target.closest('table').id === "quantitativeValuesTable")) {
+    if (event.target.closest('td')
+        && (event.target.closest('table').id === 'frequencyTable'
+            || event.target.closest('table').id === 'quantitativeValuesTable')) {
         // scroll to top of page
-        setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 500);
+        setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 500);
 
         // reset data for pushing new values later
         analyse.selectedAsins = [];
@@ -379,16 +398,16 @@ function tableClick(event) {
         analyse.searchTerm = event.target.closest('tr').firstChild.firstChild.innerHTML;
         analyse.searchTermIndex = analyse.parsedResult.data.findIndex(row => row.indexOf(analyse.searchTerm) !== -1);
 
-        let html = ''; // html buffer
-        let filteredResult = new Set(); // to avoid duplicates
-        let filteredAsins = [];
+        let html; // html buffer
+        const filteredResult = new Set(); // to avoid duplicates
+        const filteredAsins = [];
 
         // link to selected row in two-dimensional parsed array associated with clicked table row
         const selectedDataRow = analyse.parsedResult.data[analyse.searchTermIndex];
 
         // fill analyse.selectedAsins array
         for (let i = 0; i < analyse.asinsColumns.length; i++) {
-            let asin = selectedDataRow[analyse.asinsColumns[i]];
+            const asin = selectedDataRow[analyse.asinsColumns[i]];
             if (asin !== null) {
                 analyse.selectedAsins.push(asin);
                 analyse.selectedAsinsCounters.push(0);
@@ -396,9 +415,9 @@ function tableClick(event) {
         }
 
         // fill filteredResult
-        for(let i = 0; i < analyse.parsedResult.data.length; i++) {
+        for (let i = 0; i < analyse.parsedResult.data.length; i++) {
             const row = analyse.parsedResult.data[i];
-            for(let j = 0; j < analyse.selectedAsins.length; j++) {
+            for (let j = 0; j < analyse.selectedAsins.length; j++) {
                 if (row.includes(analyse.selectedAsins[j])) {
                     filteredResult.add(row); // avoid duplicates
                 }
@@ -408,25 +427,26 @@ function tableClick(event) {
         // get all asins from filteredResult and push them to filteredAsins
         filteredResult.forEach(row => {
             for (let i = 0; i < analyse.asinsColumns.length; i++) {
-                let asin = row[analyse.asinsColumns[i]];
+                const asin = row[analyse.asinsColumns[i]];
                 if (asin) filteredAsins.push(asin);
             }
-
         });
 
         // insert de-duplicated asins and their counters to analyse.competitors
-        let asins = {};
-        filteredAsins.forEach(asin => asins[asin] ? asins[asin]++ : asins[asin] = 1);
+        const asins = {};
+        // eslint-disable-next-line no-plusplus,no-return-assign
+        filteredAsins.forEach(asin => (asins[asin] ? asins[asin]++ : asins[asin] = 1));
+
         analyse.competitors = Object.entries(asins);
 
         analyse.frequency = [...filteredResult];
 
-        for(let i = 0; i < analyse.frequency.length; i++) {
+        for (let i = 0; i < analyse.frequency.length; i++) {
             analyse.quantitativeValues.push([Array(analyse.frequency.length)]);
         }
 
-        for(let i = 0; i < analyse.frequency.length; i++) {
-            for(let j = 0; j < analyse.frequency[i].length; j++) {
+        for (let i = 0; i < analyse.frequency.length; i++) {
+            for (let j = 0; j < analyse.frequency[i].length; j++) {
                 if (j === 5 || j === 6) {
                     [
                         analyse.quantitativeValues[i][5],
@@ -434,13 +454,14 @@ function tableClick(event) {
                         analyse.quantitativeValues[i][13],
                         analyse.quantitativeClicksOther[i],
                         analyse.quantitativeAccuracyClick[i],
-                        analyse.quantitativeCapacityClick[i]
+                        analyse.quantitativeCapacityClick[i],
                     ] = getQuantitativeValues(
                         analyse.frequency[i][5],
                         analyse.frequency[i][9],
                         analyse.frequency[i][13],
                         analyse.capacityClick,
-                        analyse.accuracyClick);
+                        analyse.accuracyClick,
+                    );
                     [
                         analyse.quantitativeValues[i][6],
                         analyse.quantitativeValues[i][10],
@@ -453,8 +474,9 @@ function tableClick(event) {
                         analyse.frequency[i][10],
                         analyse.frequency[i][14],
                         analyse.capacityConversion,
-                        analyse.accuracyConversion);
-                } else if ( ! (j === 9 || j === 10 || j === 13 || j === 14)) {
+                        analyse.accuracyConversion,
+                    );
+                } else if (!(j === 9 || j === 10 || j === 13 || j === 14)) {
                     analyse.quantitativeValues[i][j] = analyse.frequency[i][j];
                 }
             }
@@ -469,7 +491,8 @@ function tableClick(event) {
         html = `<h3>2. Фильтр частотности для ASINs '${analyse.selectedAsins.join("', '")}', поисковая фраза: "${analyse.searchTerm}"  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>`;
         document.getElementById('frequencyHeader').innerHTML = html;
 
-        html = `<h3>3. Количественные значения click, conversion  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>`;
+        // eslint-disable-next-line max-len
+        html = '<h3>3. Количественные значения click, conversion  <input type="button" onclick="clearFilter()" value="сбросить фильтр"></h3>';
         document.getElementById('quantitativeValuesHeader').innerHTML = html;
 
         renderTable(
@@ -477,32 +500,37 @@ function tableClick(event) {
             analyse.competitors,
             analyse.competitorsTableHeaders.indexOf('К-во') !== -1 ? analyse.competitorsTableHeaders.indexOf('К-во') : 0,
             false,
-            false);
+            false,
+        );
 
         renderTable(
             'frequency',
             analyse.frequency,
             analyse.sortColumnNumber,
-            analyse.isSortAscending);
+            analyse.isSortAscending,
+        );
 
         renderTable(
             'quantitativeValues',
             analyse.quantitativeValues,
             analyse.sortColumnNumber,
-            analyse.isSortAscending);
+            analyse.isSortAscending,
+        );
     } else if (event.target.closest('th') && event.target.tagName !== 'INPUT') {
-        let clickedElement = event.target.closest('th');
-        let sortedDirection = clickedElement.dataset.sortedDirection;
-        let parentElementId = event.target.closest('div').id;
-        let isFullTable = (event.target.closest('div').id !== 'competitors');
+        const clickedElement = event.target.closest('th');
+        const { sortedDirection } = clickedElement.dataset;
+        const parentElementId = event.target.closest('div').id;
+        const isFullTable = (event.target.closest('div').id !== 'competitors');
 
         // sets ascending sort or inverts direction if exists
-        if (sortedDirection !== '') analyse.isSortAscending = (sortedDirection !== "ascending"); else analyse.isSortAscending = true;
+        // eslint-disable-next-line max-len
+        if (sortedDirection !== '') analyse.isSortAscending = (sortedDirection !== 'ascending'); else analyse.isSortAscending = true;
 
         event.target.closest('tr').querySelectorAll('data-sorted-direction')
+        // eslint-disable-next-line no-return-assign
         .forEach(element => element.dataset.sortedDirection = '');
 
-        clickedElement.dataset.sortedDirection = (analyse.isSortAscending ? "ascending" : "descending");
+        clickedElement.dataset.sortedDirection = (analyse.isSortAscending ? 'ascending' : 'descending');
 
         renderTable(
             parentElementId,
@@ -514,16 +542,8 @@ function tableClick(event) {
     }
 }
 
-/**
- * Unhide all rows in table (remove from all rows class '.hide')
- * @param tableId
- */
-function unhideTableRows(tableId) {
-    document.getElementById(tableId).querySelectorAll('tr[data-visible="false"]').forEach(element=>element.dataset.visible = 'true');
-}
-
 function sortStringArray(dataArray, arrayIndex, isAscending) {
-    dataArray.sort((a,b) => {
+    dataArray.sort((a, b) => {
         a = a[arrayIndex];
         b = b[arrayIndex];
         a = (a === null ? a = '' : String(a));
@@ -533,9 +553,9 @@ function sortStringArray(dataArray, arrayIndex, isAscending) {
 }
 
 function sortIntArray(dataArray, arrayIndex, isAscending) {
-    dataArray.sort((a,b) => {
-        a = parseInt(String(a[arrayIndex]).replace(/,/g,''));
-        b = parseInt(String(b[arrayIndex]).replace(/,/g,''));
+    dataArray.sort((a, b) => {
+        a = parseInt(String(a[arrayIndex]).replace(/,/g, ''));
+        b = parseInt(String(b[arrayIndex]).replace(/,/g, ''));
         if (isNaN(a)) a = 101;
         if (isNaN(b)) b = 101;
         return isAscending ? a - b : b - a;
@@ -543,7 +563,7 @@ function sortIntArray(dataArray, arrayIndex, isAscending) {
 }
 
 function sortFloatArray(dataArray, arrayIndex, isAscending) {
-    dataArray.sort((a,b) => {
+    dataArray.sort((a, b) => {
         a = parseFloat(a[arrayIndex]);
         b = parseFloat(b[arrayIndex]);
         if (isNaN(a)) a = 101;
@@ -554,42 +574,44 @@ function sortFloatArray(dataArray, arrayIndex, isAscending) {
 
 function sortArray(dataArray, columnNumberToSort, columnDataType, isSortAscending) {
     switch (columnDataType) {
-        case "string":
-            sortStringArray(dataArray, columnNumberToSort, isSortAscending);
-            break;
+    case 'string':
+        sortStringArray(dataArray, columnNumberToSort, isSortAscending);
+        break;
 
-        case "int":
-            sortIntArray(dataArray, columnNumberToSort, isSortAscending);
-            break;
+    case 'int':
+        sortIntArray(dataArray, columnNumberToSort, isSortAscending);
+        break;
 
-        case "float":
-            sortFloatArray(dataArray, columnNumberToSort, isSortAscending);
-            break;
+    case 'float':
+        sortFloatArray(dataArray, columnNumberToSort, isSortAscending);
+        break;
+
+    default:
     }
 }
 
 function getFullTableColumnName(columnNumber) {
-    let columnName =  {
+    const columnName =  {
         isSearchTerm: (columnNumber === analyse.searchTermColumn),
         isSearchFrequencyRank: (columnNumber === analyse.searchFrequencyRankColumn),
         isAsin: analyse.asinsColumns.includes(columnNumber),
         isProductDescription: analyse.productsDescriptionColumns.includes(columnNumber),
         isClick: analyse.clickColumns.includes(columnNumber),
-        isConversion: analyse.conversionColumns.includes(columnNumber)
+        isConversion: analyse.conversionColumns.includes(columnNumber),
     };
 
     // columnName.value - a string with the name of the property that has a true value (it may be the only one)
     // columnName.value is obtained from such property name conversion as "isSearchFrequencyRank" => "searchFrequencyRank"
     // it is in camelCase without "is": searchTerm, searchFrequencyRank, asin, productDescription, click, conversion
     columnName.value = Object.keys(columnName).filter(
-        value => columnName[value])[0].substr(2).replace(/^\w/, c => c.toLowerCase()
-    );
+        value => columnName[value],
+    )[0].substr(2).replace(/^\w/, c => c.toLowerCase());
 
     return columnName;
 }
 
 function getCompetitorsTableColumnName(columnNumber) {
-    let columnName =  {
+    const columnName =  {
         isAsin: (columnNumber === 0),
         isQuantity: (columnNumber === 1),
         isLink: (columnNumber === 2),
@@ -599,12 +621,13 @@ function getCompetitorsTableColumnName(columnNumber) {
     // columnName.value is obtained from such property name conversion as "isSearchFrequencyRank" => "searchFrequencyRank"
     // it is in camelCase without "is": searchFrequencyRank, quantity, asin
     columnName.value = Object.keys(columnName).filter(
-        value => columnName[value])[0].substr(2).replace(/^\w/, c => c.toLowerCase()
-    );
+        value => columnName[value],
+    )[0].substr(2).replace(/^\w/, c => c.toLowerCase());
 
     return columnName;
 }
 
+// eslint-disable-next-line no-unused-vars
 function clearFilter() {
     document.getElementById('competitorsHeader').innerHTML = '';
     document.getElementById('competitors').innerHTML = '';
@@ -632,26 +655,28 @@ function clearFilter() {
         'frequency',
         analyse.parsedResult.data,
         analyse.sortColumnNumber,
-        analyse.isSortAscending);
+        analyse.isSortAscending,
+    );
 
     // scroll to top of page
-    setTimeout(() => window.scrollTo({ top: 0, behavior: "smooth" }), 500);
+    setTimeout(() => window.scrollTo({ top: 0, behavior: 'smooth' }), 500);
 }
 
+// eslint-disable-next-line no-unused-vars
 function filter(tableParentId, columnNumber, inputElement, event) {
     if (!event) event = window.event;
-    let keyCode = event.keyCode || event.which;
+    const keyCode = event.keyCode || event.which;
     if (keyCode !== 13) return;
-    let table = document.getElementById(tableParentId + "Table");
+    const table = document.getElementById(`${tableParentId}Table`);
 
     // hide all rows that do not match the filter
-    for(let i = 0; i < analyse[tableParentId].length; i++) {
-        if(String(analyse[tableParentId][i][columnNumber]).toLowerCase().includes(String(inputElement.value).toLowerCase())) {
+    for (let i = 0; i < analyse[tableParentId].length; i++) {
+        if (String(analyse[tableParentId][i][columnNumber]).toLowerCase().includes(String(inputElement.value).toLowerCase())) {
             // i+1 because array does not have columns headers but table does
-            table.rows[i+1].dataset.visible = "true";
+            table.rows[i + 1].dataset.visible = 'true';
         } else {
             // i+1 because array does not have columns headers but table does
-            table.rows[i+1].dataset.visible = "false";
+            table.rows[i + 1].dataset.visible = 'false';
         }
     }
 
@@ -667,7 +692,7 @@ function filter(tableParentId, columnNumber, inputElement, event) {
 }
 
 function getQuantitativeValues(a, b, c, capacity, accuracy) {
-    let values = [];
+    const values = [];
     a = parseFloat(a);
     b = parseFloat(b);
     c = parseFloat(c);
@@ -677,34 +702,35 @@ function getQuantitativeValues(a, b, c, capacity, accuracy) {
     values.push(10000 - values[0] - values[1] - values[2]);
 
     let minValue = Math.min(...values);
-    if(minValue === 0) {
-        values.some(value => { if(value) minValue = value; });
-        if(minValue === 0) return [0,0,0,0,0];
+    if (minValue === 0) {
+        // eslint-disable-next-line array-callback-return
+        values.some(value => { if (value) minValue = value; });
+        if (minValue === 0) return [0, 0, 0, 0, 0];
 
         values.forEach(value => {
             if (value !== 0 && value < minValue) minValue = value;
         });
     }
 
-    let newValues = [];
+    const newValues = [];
     let newAccuracy = 1;
     let currentAccuracy = 1;
     let multiplier = 1;
-    let maxMultiplier = 10000 * Math.pow(10, capacity - 4);
-    let accuracyValues = [];
-    let relativeValues = []; // array of values/minValue
-    let info = ''; // info buffer
+    // eslint-disable-next-line no-restricted-properties
+    const maxMultiplier = 10000 * Math.pow(10, capacity - 4);
+    const accuracyValues = [];
+    const relativeValues = []; // array of values/minValue
 
     // calculate values relative to variable with minimal value
-    for(let i = 0; i < 4; i++) {
-        relativeValues[i] = values[i]/minValue;
+    for (let i = 0; i < 4; i++) {
+        relativeValues[i] = values[i] / minValue;
     }
 
     // find optimal values ​​corresponding to the given capacity and accuracy
-    for(let i = 1; i < maxMultiplier; i++) {
-        for(let j = 0; j < 4; j++) {
+    for (let i = 1; i < maxMultiplier; i++) {
+        for (let j = 0; j < 4; j++) {
             newValues[j] = relativeValues[j] * i;
-            accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j])/newValues[j]) : 0);
+            accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j]) / newValues[j]) : 0);
         }
         newAccuracy = Math.max(...accuracyValues);
         if (newAccuracy < currentAccuracy) {
@@ -715,9 +741,9 @@ function getQuantitativeValues(a, b, c, capacity, accuracy) {
     }
 
     // get values ​​for the found optimal multiplier
-    for(let j = 0; j < 4; j++) {
+    for (let j = 0; j < 4; j++) {
         newValues[j] = relativeValues[j] * multiplier;
-        accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j])/newValues[j]) : 0);
+        accuracyValues[j] = (newValues[j] ? Math.abs(1 - Math.round(newValues[j]) / newValues[j]) : 0);
         newValues[j] = Math.round(newValues[j]);
     }
 
@@ -727,16 +753,17 @@ function getQuantitativeValues(a, b, c, capacity, accuracy) {
         newValues[2],
         newValues[3],
         currentAccuracy,
-        capacity
+        capacity,
     ];
 }
 
+// eslint-disable-next-line no-unused-vars
 function changeQuantitativeValues(columnType, valueType, input, columnNumberToSort, isSortAscending) {
-    let value = input.value;
-    if(columnType === 'click') {
-        if(valueType === 'capacity') {
+    let { value } = input;
+    if (columnType === 'click') {
+        if (valueType === 'capacity') {
             value = parseInt(value);
-            if (isNaN(value)){
+            if (isNaN(value)) {
                 value = 4;
             } else if (value < 1) {
                 value = 1;
@@ -748,58 +775,59 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
             analyse.capacityClick = value;
         } else {
             value = parseFloat(value);
-            if (isNaN(value) || value < 0){
+            if (isNaN(value) || value < 0) {
                 value = 0;
             } else if (value > 100) {
                 value = 100;
             }
             input.value = value.toFixed(3);
+            // eslint-disable-next-line no-unused-expressions
             input.type === 'range'
                 ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
                 : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
-            analyse.accuracyClick = value/100;
+            analyse.accuracyClick = value / 100;
         }
+    } else if (valueType === 'capacity') {
+        if (isNaN(value)) {
+            value = 4;
+        } else if (value < 1) {
+            value = 1;
+        } else if (value > 4) {
+            value = 4;
+        }
+        input.value = value;
+        input.previousElementSibling.previousSibling.innerText = value;
+        analyse.capacityConversion = value;
     } else {
-        if(valueType === 'capacity') {
-            if (isNaN(value)){
-                value = 4;
-            } else if (value < 1) {
-                value = 1;
-            } else if (value > 4) {
-                value = 4;
-            }
-            input.value = value;
-            input.previousElementSibling.previousSibling.innerText = value;
-            analyse.capacityConversion = value;
-        } else {
-            value = parseFloat(value);
-            if (isNaN(value) || value < 0){
-                value = 0;
-            } else if (value > 100) {
-                value = 100;
-            }
-            input.value = value.toFixed(3);
-            input.type === 'range'
-                ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
-                : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
-            analyse.accuracyConversion = value/100;
+        value = parseFloat(value);
+        if (isNaN(value) || value < 0) {
+            value = 0;
+        } else if (value > 100) {
+            value = 100;
         }
+        input.value = value.toFixed(3);
+        // eslint-disable-next-line no-unused-expressions
+        input.type === 'range'
+            ? input.previousElementSibling.previousSibling.value = value.toFixed(3)
+            : input.nextElementSibling.nextElementSibling.value = value.toFixed(3);
+        analyse.accuracyConversion = value / 100;
     }
 
-    for(let i = 0; i < analyse.frequency.length; i++) {
+    for (let i = 0; i < analyse.frequency.length; i++) {
         [
             analyse.quantitativeValues[i][5],
             analyse.quantitativeValues[i][9],
             analyse.quantitativeValues[i][13],
             analyse.quantitativeClicksOther[i],
             analyse.quantitativeAccuracyClick[i],
-            analyse.quantitativeCapacityClick[i]
+            analyse.quantitativeCapacityClick[i],
         ] = getQuantitativeValues(
             analyse.frequency[i][5],
             analyse.frequency[i][9],
             analyse.frequency[i][13],
             analyse.capacityClick,
-            analyse.accuracyClick);
+            analyse.accuracyClick,
+        );
         [
             analyse.quantitativeValues[i][6],
             analyse.quantitativeValues[i][10],
@@ -812,17 +840,18 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
             analyse.frequency[i][10],
             analyse.frequency[i][14],
             analyse.capacityConversion,
-            analyse.accuracyConversion);
+            analyse.accuracyConversion,
+        );
     }
 
-    for(let i = 0; i < analyse.quantitativeValues.length; i++) {
-        let row = document.getElementById('quantitativeValuesTable').rows[i + 1]; // .rows[i + 1] to skip column headers in table
-        let titleClick = createQuantitativeTitle(i, 'Click');
-        let titleConversion = createQuantitativeTitle(i, 'Conversion');
+    for (let i = 0; i < analyse.quantitativeValues.length; i++) {
+        const row = document.getElementById('quantitativeValuesTable').rows[i + 1]; // .rows[i + 1] to skip column headers in table
+        const titleClick = createQuantitativeTitle(i, 'Click');
+        const titleConversion = createQuantitativeTitle(i, 'Conversion');
 
-        for(let j = 0; j < analyse.clickColumns.length; j++) {
-            let cellClick = row.cells[analyse.clickColumns[j] - 1]; // - 1 because table does not have first column that data array does
-            let cellConversion = row.cells[analyse.conversionColumns[j] - 1]; // - 1 because table does not have first column that data array does
+        for (let j = 0; j < analyse.clickColumns.length; j++) {
+            const cellClick = row.cells[analyse.clickColumns[j] - 1]; // - 1 because table does not have first column that data array does
+            const cellConversion = row.cells[analyse.conversionColumns[j] - 1]; // - 1 because table does not have first column that data array does
 
             cellClick.innerText = analyse.quantitativeValues[i][analyse.clickColumns[j]];
             cellConversion.innerText = analyse.quantitativeValues[i][analyse.conversionColumns[j]];
@@ -834,12 +863,11 @@ function changeQuantitativeValues(columnType, valueType, input, columnNumberToSo
 }
 
 function createQuantitativeTitle(rowIndex, columnType) {
-    if(isNaN(rowIndex) || rowIndex < 0)
-        throw Error('rowIndex must be a number >= 0');
-    if(columnType !== 'Click' && columnType !== 'Conversion')
-        throw Error('createQuantitativeTitle: columnType must be string "Click" or "Conversion"');
+    if (isNaN(rowIndex) || rowIndex < 0) throw Error('rowIndex must be a number >= 0');
+    // eslint-disable-next-line max-len
+    if (columnType !== 'Click' && columnType !== 'Conversion') throw Error('createQuantitativeTitle: columnType must be string "Click" or "Conversion"');
 
-    let isClick = (columnType === 'Click');
+    const isClick = (columnType === 'Click');
 
     return `${
         analyse.quantitativeValues[rowIndex][isClick ? 5 : 6]} : ${analyse.quantitativeValues[rowIndex][isClick ? 9 : 10]} : ${analyse.quantitativeValues[rowIndex][isClick ? 13 : 14]} : ${analyse[isClick ? 'quantitativeClicksOther' : 'quantitativeConversionsOther'][rowIndex]}\n${
@@ -848,6 +876,7 @@ function createQuantitativeTitle(rowIndex, columnType) {
         analyse[isClick ? 'capacityClick' : 'capacityConversion']} - разрядностью минимального числа`;
 }
 
+// eslint-disable-next-line no-new,no-undef
 new ClipboardJS('.clipboard'); // handle clicks on elements with ".clipboard" class for copy data to clipboard
 document.body.querySelector('#fileInput').value = ''; // clear filename if exists
 document.body.addEventListener('click', tableClick);
