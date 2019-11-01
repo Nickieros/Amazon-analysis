@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8"/>
+	<title>Analysis tool for Amazon sales</title>
+    <style>
+		body {
+			padding: 0;
+			margin: 0;
+			font-size: 0.88vw;
+		}
+
+		table{
+			font-family: monospace;
+			border-collapse: separate;
+			border-spacing: 2px;
+			border: none;
+		}
+
+		table.fullTable {
+			cursor: pointer;
+			width: 98.5vw;
+		}
+
+		td {
+			border-collapse: collapse;
+			border-spacing: 0;
+			border: none;
+			padding: 0.15vw 0.05vw 0.2vw 0.2vw;
+			text-align: center;
+		}
+
+		#competitors {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+		}
+
+		.competitorsTable th {
+			cursor: pointer;
+			background-color: #fff0f0;
+		}
+
+		#competitors td {
+			background-color: aliceblue;
+		}
+
+		#competitors td:nth-child(2) {
+			text-align: center;
+		}
+
+		#competitors td:nth-child(2n) {
+			background: none;
+		}
+
+		td span {
+			overflow: hidden;
+			white-space: nowrap;
+			text-overflow: ellipsis;
+			display: block;
+		}
+
+		tr[data-visible="true"] {
+			display: table-row;
+		}
+
+		.fullTable th {
+			background-color: #fff0f0;
+		}
+
+		tr[data-visible="false"] {
+			display: none;
+		}
+
+		.quantitativeSetup td:nth-child(1n) {
+			text-align: right;
+		}
+
+		.quantitativeSetup td:nth-child(2n) {
+			text-align: left;
+		}
+
+		.quantitativeSetup td:nth-child(1),
+		.quantitativeSetup td:nth-child(2),
+		.quantitativeSetup td:nth-child(3),
+		.quantitativeSetup td:nth-child(4) {
+			background-color: #f0fff8;
+		}
+
+		.quantitativeSetup td:nth-child(5),
+		.quantitativeSetup td:nth-child(6),
+		.quantitativeSetup td:nth-child(7),
+		.quantitativeSetup td:nth-child(8) {
+			background-color: aliceblue;
+		}
+
+		table.quantitativeSetup  {
+			width: 98.5vw;
+		}
+
+		.quantitativeSetup div {
+			display: inline-block;
+			text-align: center;
+		}
+
+		#quantitativeValuesTable td {
+			background: none;
+		}
+
+		#quantitativeValuesTable td:nth-child(5),
+		#quantitativeValuesTable td:nth-child(9),
+		#quantitativeValuesTable td:nth-child(13) {
+			background-color: #f0fff8;
+		}
+
+		#quantitativeValuesTable td:nth-child(6),
+		#quantitativeValuesTable td:nth-child(10),
+		#quantitativeValuesTable td:nth-child(14) {
+			background-color: aliceblue;
+		}
+
+		#frequencyTable td:hover,
+		#quantitativeValuesTable td:hover {
+			color: white;
+			background-color: blue;
+		}
+
+		.fullTable td:nth-child(1n) {
+			background-color: #f0fff8;
+		}
+
+		.fullTable td:nth-child(2n) {
+			background-color: aliceblue;
+		}
+
+		.productDescription {
+			width: 13.3vw;
+		}
+
+		.searchTerm {
+			width: 12vw;
+		}
+
+		.fullTable {
+			padding-bottom: 1vw;
+		}
+
+		h3 {
+			font-family: sans-serif;
+		}
+
+		.hide {
+			display: none;
+		}
+
+		th[data-sorted-direction]:after {
+			content: '';
+			border: 0.3vw solid transparent;
+			display: inline-block;
+			width: 0;
+			height: 0;
+			margin-left: 0.2vw;
+		}
+
+		th[data-sorted-direction="descending"]:after {
+			border-top: 0.3vw solid white;
+			border-bottom: 0;
+		}
+
+		th[data-sorted-direction="ascending"]:after {
+			border-bottom: 0.3vw solid white;
+			border-top: 0;
+			margin-bottom: 0.25vw;
+		}
+
+		th {
+			font-family: sans-serif;
+			white-space: nowrap;
+			border-collapse: collapse;
+			border-spacing: 0;
+			border: none;
+		}
+
+		th[data-sorted-direction="ascending"],
+		th[data-sorted-direction="descending"] {
+			background-color: blue;
+			color: white;
+		}
+
+		input[type='button'] {
+			border-radius: 0.5vw;
+		}
+
+		input[type='number'] {
+			padding: 0 0 0 0.3vw;
+			font-family: sans-serif;
+			line-height: 1.5;
+			/*font-size: 150%;*/
+		}
+
+		input[max='4'] {
+			width: 2.5vw;
+		}
+
+		input[max='100'] {
+			width: 25vw;
+		}
+
+		th input {
+			line-height: 2;
+			width: 100%;
+			letter-spacing: 0;
+			vertical-align: top;
+			color: black;
+			border: none;
+			padding: 0;
+			margin: 0;
+			background-color: white;
+			caret-color: black;
+		}
+
+		/** override hardcoded style in form fields with autocomplete in chrome*/
+		th input:-webkit-autofill {
+			-webkit-text-fill-color: white;
+			-webkit-animation-name: autofill;
+			-webkit-animation-fill-mode: both;
+		}
+
+		 /**override hardcoded style in form fields with autocomplete in chrome*/
+		@-webkit-keyframes autofill {
+			to {
+				background: transparent;
+			}
+		}
+
+	</style>
+</head>
+<body>
+<p>
+	<input type="button" id="refresh" onclick="location.reload(true)" value="начать с начала"> <input type="file" id="fileInput" name="file" accept="text/csv" onchange="parseFile()">
+</p>
+
+<div id="competitorsHeader"></div>
+<div id="competitors"></div>
+
+<div id="frequencyHeader"></div>
+<div id="frequency"></div>
+
+<div id="quantitativeValuesHeader"></div>
+<div id="quantitativeValues"></div>
+
+</body>
+<script src="./libs/clipboard.min.js" type="text/javascript"></script>
+<script src="./libs/papaparse.min.js" type="text/javascript"></script>
+<script src="scriptPublic_ru.js"></script>
+</html>

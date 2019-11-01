@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8"/>
-	<title>Amazon competitors analysis and SEO</title>
+	<title>Analysis tool for Amazon sales</title>
     <style>
 		body {
 			padding: 0;
@@ -38,11 +38,11 @@
 
 		.competitorsTable th {
 			cursor: pointer;
-			background-color: #fff0f0;
+			background-color: #ffd9d2;
 		}
 
 		#competitors td {
-			background-color: aliceblue;
+			background-color: #f0fff8;
 		}
 
 		#competitors td:nth-child(2) {
@@ -65,7 +65,7 @@
 		}
 
 		.fullTable th {
-			background-color: #fff0f0;
+			background-color: #ffd9d2;
 		}
 
 		tr[data-visible="false"] {
@@ -84,14 +84,14 @@
 		.quantitativeSetup td:nth-child(2),
 		.quantitativeSetup td:nth-child(3),
 		.quantitativeSetup td:nth-child(4) {
-			background-color: #f0fff8;
+			background-color: #dcffd4;
 		}
 
 		.quantitativeSetup td:nth-child(5),
 		.quantitativeSetup td:nth-child(6),
 		.quantitativeSetup td:nth-child(7),
 		.quantitativeSetup td:nth-child(8) {
-			background-color: aliceblue;
+			background-color: #deebff;
 		}
 
 		table.quantitativeSetup  {
@@ -110,19 +110,19 @@
 		#quantitativeValuesTable td:nth-child(5),
 		#quantitativeValuesTable td:nth-child(9),
 		#quantitativeValuesTable td:nth-child(13) {
-			background-color: #f0fff8;
+			background-color: #dcffd4;
 		}
 
 		#quantitativeValuesTable td:nth-child(6),
 		#quantitativeValuesTable td:nth-child(10),
 		#quantitativeValuesTable td:nth-child(14) {
-			background-color: aliceblue;
+			background-color: #deebff;
 		}
 
 		#frequencyTable td:hover,
 		#quantitativeValuesTable td:hover {
 			color: white;
-			background-color: blue;
+			background-color: #0048ff;
 		}
 
 		.fullTable td:nth-child(1n) {
@@ -147,6 +147,7 @@
 
 		h3 {
 			font-family: sans-serif;
+			text-align: center;
 		}
 
 		.hide {
@@ -183,7 +184,7 @@
 
 		th[data-sorted-direction="ascending"],
 		th[data-sorted-direction="descending"] {
-			background-color: blue;
+			background-color: #0048ff;
 			color: white;
 		}
 
@@ -203,7 +204,7 @@
 		}
 
 		input[max='100'] {
-			width: 25vw;
+			width: 24vw;
 		}
 
 		th input {
@@ -237,7 +238,7 @@
 </head>
 <body>
 <p>
-	<input type="button" id="refresh" onclick="location.reload(true)" value="начать с начала"> <input type="file" id="fileInput" name="file" accept="text/csv" onchange="parseFile()">
+	<input type="button" id="refresh" onclick="location.reload(true)" value="Restart"> <input type="file" id="fileInput" name="file" accept="text/csv" onchange="parseFile()">
 </p>
 
 <div id="competitorsHeader"></div>
@@ -252,5 +253,5 @@
 </body>
 <script src="./libs/clipboard.min.js" type="text/javascript"></script>
 <script src="./libs/papaparse.min.js" type="text/javascript"></script>
-<script src="scriptPublic.js"></script>
+<script src="scriptPublic_en.js"></script>
 </html>
