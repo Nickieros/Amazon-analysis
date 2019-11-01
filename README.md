@@ -3,8 +3,7 @@ Analysis tool for Amazon sales.
 
 ![Hi-res screenshot](readme_media/screenshot.png "Hi-res screenshot")
 
-Video:
-![Video step-by-step](https://youtu.be/SxoRe1EL3Wc "Video step-by-step")
+Video step-by-step: https://youtu.be/SxoRe1EL3Wc
 
 ## Overview
 Analysis tool for Amazon sales. Competitors, SEO and quantitative analysis. 
